@@ -108,7 +108,7 @@ def get_llm_formatted_input(messages_file: str, trips_file: str) -> str:
     trips = load_trip_data_from_csv(trips_file)
 
     # Send the formatted data to the LLM API
-    formatted_chat_data = "\n".join(f"{msg.user_id}: {msg.content}" for msg in messages)
+    formatted_chat_data = "\n".join(f"{msg['user_id']}: {msg['content']}" for msg in messages)
     
     # Format trip information for each trip
     trip_info_strings = [
@@ -119,10 +119,42 @@ def get_llm_formatted_input(messages_file: str, trips_file: str) -> str:
 
     return final_data
 
+def save_trip_data_to_csv(origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
+    """Saves trip data to a CSV file."""
+    with open(file_path, mode='a', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        
+        # Write the header if the file is empty
+        if f.tell() == 0:
+            writer.writerow(["origin_city", "start_date", "end_date"])  # Write header
+        
+        # Write the trip data as a new row
+        writer.writerow([origin_city, start_date, end_date])  # Write trip data
 
 # Example usage
 if __name__ == "__main__":
-    # Read all messages from the CSV file
-    messages = read_messages_from_csv()
-    for message in messages:
-        print(message)
+    # Generate sample trips.csv
+    sample_trips = [
+        ("NYC", "2023-10-01", "2023-10-10"),
+        ("LAX", "2023-11-01", "2023-11-05"),
+        ("ORD", "2023-12-15", "2023-12-20")
+    ]
+    
+    for origin_city, start_date, end_date in sample_trips:
+        save_trip_data_to_csv(origin_city, start_date, end_date)
+
+    # Generate sample messages.csv
+    sample_messages = [
+        ("User1", "I love hiking and exploring nature."),
+        ("User2", "I prefer relaxing on the beach and enjoying the sun."),
+        ("User3", "What are the best hiking trails near NYC?")
+    ]
+    
+    for user_id, content in sample_messages:
+        save_message_to_csv(user_id, content)
+
+    # Get formatted input for the LLM
+    formatted_input = get_llm_formatted_input('messages.csv', 'trips.csv')
+    
+    # Print the formatted input
+    print(formatted_input)
