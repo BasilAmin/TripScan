@@ -23,7 +23,7 @@ class RobustCityRecommender:
         
         # Build model pipeline with imputation
         self.model = self._build_model()
-        self.city_to_idx = {str(city).lower(): idx for idx, city in enumerate(self.df['city'])}
+        self.city_to_idx = {city: idx for idx, city in enumerate(self.df['city'])}
 
     def _validate_data(self):
         """Ensure data is clean and valid"""
@@ -41,7 +41,7 @@ class RobustCityRecommender:
     def _build_model(self):
         """Build robust pipeline with imputation"""
         return make_pipeline(
-            SimpleImputer(strategy='median'),
+            SimpleImputer(strategy='median'),  # Handle missing values
             MinMaxScaler(),
             MLPClassifier(
                 hidden_layer_sizes=(128, 64),
@@ -54,33 +54,25 @@ class RobustCityRecommender:
     def calculate_aggregate_preferences(self, users_data):
         """Calculate weighted mean preferences safely"""
         agg_prefs = {feat: [] for feat in self.base_features}
-        self.vetoed_cities = set()
         
         for user in users_data:
-            # Process vetoes
-            if 'veto' in user:
-                if isinstance(user['veto'], list):
-                    self.vetoed_cities.update(str(city).lower() for city in user['veto'])
-                else:
-                    self.vetoed_cities.add(str(user['veto']).lower())
-            
             try:
-                user_total = max(sum(tag['score'] for tag in user['tags']), 1e-6)
-                for tag in user['tags']:
-                    if tag['tag'] in agg_prefs:
-                        agg_prefs[tag['tag']].append(tag['score'] / user_total)
+                user_total = max(sum(tag.score for tag in user.tags), 1e-6)  # Avoid division by zero
+                for tag in user.tags:
+                    if tag.tag in agg_prefs:
+                        agg_prefs[tag.tag].append(tag.score/ user_total)
             except Exception as e:
-                print(f"Warning: Error processing user {user.get('user', 'unknown')}: {e}")
+                print(f"Warning: Error processing user {getattr(user, 'user', 'unknown')}: {e}")
                 continue
         
         # Calculate means safely
         final_prefs = {}
         for feat, values in agg_prefs.items():
-            if values:
+            if values:  # Only include features with valid values
                 final_prefs[feat] = np.nanmean(values) if values else 0
         return final_prefs
 
-    def train(self, default_cities=['barcelona', 'tokyo', 'paris']):
+    def train(self, default_cities=['Barcelona', 'Tokyo', 'Paris']):
         """Train with default cities to ensure stability"""
         X_train = []
         y_train = []
@@ -113,37 +105,26 @@ class RobustCityRecommender:
             poly_vec = self.poly.transform(vec.reshape(1, -1))
             probas = self.model.predict_proba(poly_vec)[0]
             
-            # Get top recommendations excluding vetoed cities
-            recommendations = []
-            for idx in np.argsort(probas)[-top_k:][::-1]:
-                city_name = str(self.df.iloc[idx]['city']).lower()
-                if city_name not in self.vetoed_cities:
-                    recommendations.append({
-                        'city': self.df.iloc[idx]['city'],
-                        'country': self.df.iloc[idx]['country'],
-                        'match_score': round(float(probas[idx] * 100), 1),
-                        'features': {f: float(self.df.iloc[idx][f]) for f in preferences.keys()}
-                    })
-                    if len(recommendations) >= top_k:
-                        break
-            
-            return recommendations
+            # Get top recommendations
+            top_indices = np.argsort(probas)[-top_k:][::-1]
+            return [{
+                'city': self.df.iloc[idx]['city'],
+                'country': self.df.iloc[idx]['country'],
+                'match_score': round(float(probas[idx] * 100), 1),
+                'features': {f: float(self.df.iloc[idx][f]) for f in preferences.keys()}
+            } for idx in top_indices]
         
         except Exception as e:
             print(f"Recommendation error: {e}")
             return []
 
-def generate_recommendations(input_file='input.json', output_file='output.json'):
+def generate_recommendations(users_data):
     """Main function to generate recommendations"""
     print("Initializing recommendation system...")
     
     try:
         # Initialize recommender
-        recommender = RobustCityRecommender('location.csv')
-        
-        # Load input data
-        with open(input_file) as f:
-            users_data = json.load(f)
+        recommender = RobustCityRecommender('backend/data/enhanced_cities.csv')
         
         # Train model (using default cities for stability)
         print("Training model...")
@@ -159,19 +140,18 @@ def generate_recommendations(input_file='input.json', output_file='output.json')
         results = recommender.recommend(agg_prefs)
         
         if not results:
-            raise ValueError("No recommendations generated (possibly all vetoed)")
+            raise ValueError("No recommendations generated")
         
         # Prepare and save output
         output = {
             "aggregate_preferences": {k: float(v) for k, v in agg_prefs.items()},
-            "vetoed_cities": list(recommender.vetoed_cities),
-            "recommendations": results
+            "top_recommendations": results
         }
         
-        with open(output_file, 'w') as f:
+        with open('output.json', 'w') as f:
             json.dump(output, f, indent=2)
         
-        print(f"Successfully saved recommendations to {output_file}")
+        print("Successfully saved recommendations to output.json")
         return True
     
     except Exception as e:
@@ -179,4 +159,24 @@ def generate_recommendations(input_file='input.json', output_file='output.json')
         return False
 
 if __name__ == "__main__":
-    generate_recommendations()
+    # Simulación de entrada JSON
+    sample_input = [
+        {
+            "user": "user1",
+            "tags": [
+                {"tag": "food", "score": 8},
+                {"tag": "hiking", "score": 4},
+                {"tag": "english_friendly", "score": 7}
+            ]
+        },
+        {
+            "user": "user2",
+            "tags": [
+                {"tag": "food", "score": 9},
+                {"tag": "hiking", "score": 3},
+                {"tag": "english_friendly", "score": 6}
+            ]
+        }
+    ]
+
+    success = generate_recommendations(sample_input)
