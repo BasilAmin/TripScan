@@ -3,11 +3,14 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pydantic import BaseModel
+from datetime import datetime
+import os
+
 from .messages import *
 from .orchestrator import *
-from datetime import datetime
 from .image import get_city_image_link
-import os
+from .imageAi import *
+
 
 app = FastAPI()
 
@@ -96,7 +99,23 @@ async def clear_chat():
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
+    
+@app.post("/sendMessageImage/")
+async def detect_location_from_image(user_data: MessageImage):
+    """
+    Endpoint to detect location from an image using Gemini API.
+    """
+    try:
+        # Save the image to a file
+        save_image_to_file(user_data.image)
+        # Run the analysis with Gemini
+        location = await image_to_location()
+        save_message_to_csv(user_data.user_id, user_data.content)
+        save_message_to_csv("System", f"The user {user_data.user_id} upload a photo from {location}")
+        return {"location": location}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -104,3 +123,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)

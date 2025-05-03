@@ -2,6 +2,7 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 import os
+import base64
 import asyncio
 
 load_dotenv()
@@ -32,5 +33,15 @@ async def image_to_location():
     # Strip and return the plain-text location
     return response.text.strip()
 
+def save_image_to_file(base64_str: str):
+    # Decode the base64 string and save the image to a file
+    try:
+        image_data = base64.b64decode(base64_str.split(",")[1])  # Handle potential prefix like "data:image/jpeg;base64,"
+        with open("uploaded_image.jpg", "wb") as f:
+            f.write(image_data)
+    except Exception as e:
+        return f"Error saving image: {e}"
+        
+        
 if __name__ == "__main__":
     asyncio.run(image_to_location())
