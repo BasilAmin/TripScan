@@ -16,9 +16,7 @@ You are a negotiation assistant specialized in group scheduling. You will receiv
 
 User Prompt (to supply actual data):
 
-css
-Copy
-Edit
+
 Chat History:
 {}
 
@@ -36,9 +34,7 @@ If no single date fits everyone, choose the earliest option that excludes the fe
 
 Output only this, in exactly the format below:
 
-less
-Copy
-Edit
+
 Suggested Dates: [YYYY-MM-DD] or [YYYY-MM-DD to YYYY-MM-DD]  
 Reason: [One short sentence]
 – Do not include any extra text, lists, or formatting."""
