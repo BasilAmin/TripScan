@@ -34,13 +34,13 @@ async def main_process():
         json_data = json.loads(recommendation_output)
     prices = query_flight_prices(json_data, origin_city, origin_country, travel_go_date, travel_return_date)
     # Insert the 'price' attribute into each city
+    i = 0
     for city in json_data['cities']:
-        city['price'] = 100  # You can set the price to any value you want
+        city = prices[i]
+        i += 1
+    with open('output_price.json', 'w') as json_file:
+        json_file.write(json_data)
 
-
-
-# Convert back to JSON string if needed
-modified_json = json.dumps(json_data, indent=4)
 
 
 # Run the main process
