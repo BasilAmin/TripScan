@@ -133,17 +133,17 @@ def get_llm_formatted_date(trips_file: str) -> str:
 
     return final_data
 
-def save_trip_data_to_csv(origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
+def save_trip_data_to_csv(user_id:str, origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
     """Saves trip data to a CSV file."""
     with open(file_path, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         
         # Write the header if the file is empty
         if f.tell() == 0:
-            writer.writerow(["origin_city", "start_date", "end_date"])  # Write header
+            writer.writerow(["user_id", "origin_city", "start_date", "end_date"])  # Write header
         
         # Write the trip data as a new row
-        writer.writerow([origin_city, start_date, end_date])  # Write trip data
+        writer.writerow([user_id,origin_city, start_date, end_date])  # Write trip data
 
 # Example usage
 if __name__ == "__main__":

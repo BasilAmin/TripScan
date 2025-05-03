@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { DateRange } from "react-day-picker";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,10 @@ import { City } from '@/data/cities';
 import CitySearch from './CitySearch';
 import DateRangePicker from './DateRangePicker';
 import { Plane } from "lucide-react";
+import api from '@/lib/axios';
+import { getOrCreateUserId} from "@/lib/utils";
+
+const user_id = getOrCreateUserId();
 
 const TravelBanner = () => {
   const [origin, setOrigin] = useState<City | null>(null);
@@ -14,9 +17,23 @@ const TravelBanner = () => {
     to: undefined,
   });
 
-  const handleSearch = () => {
-    console.log('Search with:', { origin, dateRange });
-    // In a real app, this would trigger a search or redirect
+  const handleSearch = async () => {
+    if (!origin || !dateRange?.from) return;
+
+    const payload = {
+      user_id: user_id,
+      origin_city: origin.code, // e.g., "BCN" or "JFK"
+      start_date: dateRange.from.toISOString().split('T')[0],
+      end_date: dateRange.to ? dateRange.to.toISOString().split('T')[0] : null,
+    };
+
+    try {
+      const response = await api.post('/sendOriginAndDates', payload);
+      console.log('Search response:', response.data);
+      // Optionally do something with the result (e.g., navigate or show message)
+    } catch (error) {
+      console.error('Error sending origin and dates:', error);
+    }
   };
 
   const isSearchDisabled = !origin || !dateRange?.from;
