@@ -29,7 +29,9 @@ async def chat_with_gemini(chat_data: str) -> str:
         )
     )
     print(response.text)
-    return response.text
+    # Use instantiated objects.
+    llm_json: list[TravelPreference] = response.parsed
+    return llm_json
 
 if __name__ == "__main__":
     chat_example = """
@@ -40,3 +42,4 @@ if __name__ == "__main__":
     User5: I am interested in cultural experiences and art galleries.
     """
     asyncio.run(chat_with_gemini(chat_example))
+    
