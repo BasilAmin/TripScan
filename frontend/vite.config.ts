@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    outDir: path.resolve(__dirname, 'frontend/build'), // change output directory here
+    outDir: path.resolve(__dirname, './build'), // change output directory here
   },
 }));
 
