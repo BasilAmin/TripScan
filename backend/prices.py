@@ -3,7 +3,7 @@ import requests
 import json
 
 API_KEY = 'sh967490139224896692439644109194'
-URL = 'https://partners.api.skyscanner.net/apiservices/v3/flights/indicative/search'  # Example endpoint
+URL = 'https://partners.api.skyscanner.net/apiservices/v3/flights/indicative/search'
 
 def get_flight_price_return(origin_iata: str, destination_iata: str, travel_go_date: str, travel_return_date: str):
     return get_flight_price(origin_iata, destination_iata, travel_go_date) + get_flight_price(origin_iata, destination_iata, travel_return_date)
@@ -84,7 +84,7 @@ def get_flight_price(origin_iata: str, destination_iata: str, travel_date: str):
 def query_flight_prices(json_data: str, origin_iata: str, travel_go_date: str, travel_return_date: str):
     # Parse the JSON data
     data = json.loads(json_data)
-    with open('backend/iata.json', 'r') as file:
+    with open('backend/data/iata.json', 'r') as file:
         iata_codes = json.load(file)
     # Initialize an array to hold the prices
     prices = [] 
