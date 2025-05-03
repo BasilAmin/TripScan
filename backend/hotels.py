@@ -58,7 +58,7 @@ def display_hotels(city: str):
         photo = fetch_photo_url(h["fsq_id"]) or "No image"
         print(f"{i}. {name}")
         print(f"   Location: {loc}")
-        print(f"   Photo:    {photo}\n")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
