@@ -2,14 +2,14 @@ from .messages import *
 from .chat import *
 import asyncio
 import json
-from prices import *
+from .prices import *
 from typing import List
 from .models import TravelPreference  # Import the model for type hints
 from .recommendation import RobustCityRecommender, generate_recommendations  # Import the recommender class
 
 async def main_process():
     # Step 1: Get formatted input from CSV files
-    llm_message = get_llm_formatted_input(messages_file="messages.csv", trips_file="trips.csv")
+    llm_message = get_llm_formatted_chat(messages_file="messages.csv")
     
     # Step 2: Get JSON response from Gemini
     llm_json: List[TravelPreference] = await chat_with_gemini(llm_message)
@@ -28,7 +28,7 @@ async def main_process():
         print("Error: recommendation.py not found")
     except Exception as e:
         print(f"Error running recommendation script: {e}")
-    
+    """
     # Step 4: Calling SkyScanner API
     with open('recommendation/output.json', 'r') as recommendation_output:
         json_data = json.loads(recommendation_output)
@@ -39,7 +39,7 @@ async def main_process():
         city = prices[i]
         i += 1
     with open('output_price.json', 'w') as json_file:
-        json_file.write(json_data)
+        json_file.write(json_data)"""
 
 
 

@@ -1,36 +1,21 @@
 {
   "aggregate_preferences": {
-    "hiking": 0.14705882352941177,
-    "food": 0.1323529411764706,
-    "nightlife": 0.014705882352941176,
-    "safety": 0.10294117647058823,
-    "culture": 0.07352941176470588,
-    "beaches": 0.04411764705882353,
-    "walkability": 0.08823529411764706,
-    "public_transit": 0.07352941176470588,
-    "cleanliness": 0.10294117647058823,
-    "affordability": 0.08823529411764706,
-    "english_friendly": 0.07352941176470588
+    "hiking": 0.15873015873015872,
+    "food": 0.14285714285714285,
+    "nightlife": 0.015873015873015872,
+    "safety": 0.1111111111111111,
+    "culture": 0.07936507936507936,
+    "beaches": 0.015873015873015872,
+    "walkability": 0.07936507936507936,
+    "public_transit": 0.07936507936507936,
+    "cleanliness": 0.07936507936507936,
+    "affordability": 0.07936507936507936,
+    "english_friendly": 0.07936507936507936
   },
+  "vetoed_cities": [
+    "new york"
+  ],
   "top_recommendations": [
-    {
-      "city": "New York",
-      "country": "USA",
-      "match_score": 44.0,
-      "features": {
-        "hiking": 4.0,
-        "food": 10.0,
-        "nightlife": 10.0,
-        "safety": 10.0,
-        "culture": 5.0,
-        "beaches": 8.0,
-        "walkability": 3.0,
-        "public_transit": 6.0,
-        "cleanliness": 7.0,
-        "affordability": 7.0,
-        "english_friendly": 4.0
-      }
-    },
     {
       "city": "Barcelona",
       "country": "Spain",

@@ -28,7 +28,7 @@
       },
       {
         "tag": "affordability",
-        "score": 6
+        "score": 5
       },
       {
         "tag": "public_transit",
@@ -36,19 +36,19 @@
       },
       {
         "tag": "walkability",
-        "score": 6
+        "score": 5
       },
       {
         "tag": "cleanliness",
-        "score": 7
+        "score": 5
       },
       {
         "tag": "beaches",
-        "score": 3
+        "score": 1
       },
       {
         "tag": "city_cluster",
-        "score": 4
+        "score": 5
       }
     ],
     "veto": [
