@@ -25,6 +25,9 @@ async def main_process():
         recommendations = generate_recommendations(llm_json)
         print("Recommendations generated successfully:")
         print(recommendations)
+
+        #Step 4: Let the user know the recommendations
+        save_message_to_csv("System", "The recommendations are ready. Please click the b the output.json file.")
     except ImportError:
         print("Error: recommendation.py not found")
     except Exception as e:
