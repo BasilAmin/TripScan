@@ -3,12 +3,55 @@ import requests
 import json
 
 API_KEY = 'sh967490139224896692439644109194'
-URL = 'https://partners.api.skyscanner.net/apiservices/v3/flights/indicative/search'
+URL_PRICES = 'https://partners.api.skyscanner.net/apiservices/v3/flights/indicative/search'
+URL_AIRPORTS = 'https://partners.api.skyscanner.net/apiservices/v3/autosuggest/flights'
+headers = {
+    'Content-Type': 'application/json',
+    'x-api-key': API_KEY
+}
 
-def get_flight_price_return(origin_iata: str, destination_iata: str, travel_go_date: str, travel_return_date: str):
-    return get_flight_price(origin_iata, destination_iata, travel_go_date) + get_flight_price(origin_iata, destination_iata, travel_return_date)
+def get_city_iata_codes(city, country):
+    query_search_payload = {
+        "query": {
+            "market": "ES",
+            "locale": "en-GB",
+            "searchTerm": city,
+            "includedEntityTypes": [
+            "PLACE_TYPE_AIRPORT",
+            ]
+        }
+    }
 
-def get_flight_price(origin_iata: str, destination_iata: str, travel_date: str):
+    response = requests.post(URL_AIRPORTS, headers=headers, json=query_search_payload)
+    iata_codes = []
+
+    if response.status_code == 200:
+        data = response.json()
+        for place in data.get("places", []):
+            iata_code = place.get("iataCode")
+            city_name = place.get("cityName")
+            country_name = place.get("countryName")
+            country_code = place.get("countryId")
+            if country_code == "US":
+                country_code = "USA"
+            if iata_code and city in city_name and (country_name == country or country_code == country):
+                iata_codes.append(iata_code)
+                print(city_name, country_name, country_code)
+    return iata_codes
+
+def get_flight_price_return(origin_city, origin_country, destination_city, destination_country, travel_go_date, travel_return_date):
+    res = get_flight_price(origin_city, origin_country, destination_city, destination_country, travel_go_date)
+    go_price = get_flight_price(origin_city, origin_country, destination_city, destination_country, travel_go_date)
+    return_price = get_flight_price(destination_city, destination_country, origin_city, origin_country, travel_return_date)
+
+    # Check for None values before adding
+    if go_price is None or return_price is None:
+        print("One of the flight prices is None. Go Price:", go_price, "Return Price:", return_price)
+        return None
+
+    return go_price + return_price
+
+def get_flight_price(origin_city: str, origin_country, destination_city, destination_country: str, travel_date: str):
     try:
         travel_date_obj = datetime.strptime(travel_date, '%Y-%m-%d')
         year = travel_date_obj.year
@@ -17,71 +60,79 @@ def get_flight_price(origin_iata: str, destination_iata: str, travel_date: str):
     except ValueError:
         print("Error: travel_date must be in 'YYYY-MM-DD' format.")
         return None
-    
-    query_payload = {
-        "query": {
-            "market": "ES",
-            "locale": "en-GB",
-            "currency": "EUR",
-            "queryLegs": [
-                {
-                    "originPlace": {
-                        "queryPlace": {
-                            "iata": origin_iata
+
+    iata_codes_destination = get_city_iata_codes(destination_city, destination_country)
+
+    # Print the extracted IATA codes
+    print("Destination IATA Codes:", iata_codes_destination)
+
+    iata_codes_origin = get_city_iata_codes(origin_city, origin_country)
+
+    print("Origin IATA Codes:", iata_codes_origin)
+
+    cheapest_direct_price = float('inf')  # Start with a very high price for direct flights
+    cheapest_price = float('inf')  # Start with a very high price for all flights
+    best_origin_iata = None
+    best_destination_iata = None
+
+    for origin_iata in iata_codes_origin:
+        for destination_iata in iata_codes_destination:
+            query_payload = {
+                "query": {
+                    "market": "ES",
+                    "locale": "en-GB",
+                    "currency": "EUR",
+                    "queryLegs": [
+                        {
+                            "originPlace": {
+                                "queryPlace": {
+                                    "iata": origin_iata
+                                }
+                            },
+                            "destinationPlace": {
+                                "queryPlace": {
+                                    "iata": destination_iata
+                                }
+                            },
+                            "fixedDate": {
+                                "year": year,
+                                "month": month,
+                                "day": day
+                            },
                         }
-                    },
-                    "destinationPlace": {
-                        "queryPlace": {
-                            "iata": destination_iata
-                        }
-                    },
-                    "fixedDate": {
-                        "year": year,
-                        "month": month,
-                        "day": day
-                    },
+                    ],
+                    "dateTimeGroupingType": "DATE_TIME_GROUPING_TYPE_UNSPECIFIED"
                 }
-            ],
-            "dateTimeGroupingType": "DATE_TIME_GROUPING_TYPE_UNSPECIFIED"
-        }
-    }
+            }
 
-    # Set the headers
-    headers = {
-        'Content-Type': 'application/json',
-        'x-api-key': API_KEY
-    }
+            response = requests.post(URL_PRICES, headers=headers, json=query_payload)
 
-    response = requests.post(URL, headers=headers, json=query_payload)
-
-    if response.status_code == 200:
-        data = response.json()
-        # Extract the price of the cheapest direct flight
-        try:
-            quotes = data['content']['results']['quotes']
-            cheapest_direct_price = float('inf')  # Start with a very high price for direct flights
-            cheapest_price = float('inf')  # Start with a very high price for all flights
-            
-            for quote_key in quotes:
-                quote = quotes[quote_key]
-                price = int(quote['minPrice']['amount'])
+            if response.status_code == 200:
+                data = response.json()
+                # Extract the price of the cheapest flight
+                try:
+                    quotes = data['content']['results']['quotes']
+                    for quote_key in quotes:
+                        quote = quotes[quote_key]
+                        price = int(quote['minPrice']['amount'])
+                        print(f"Checking flights from {origin_iata} to {destination_iata} on {travel_date}. Price:", price, '€')
+                        # Always check for the cheapest price regardless of directness
+                        if price < cheapest_price:
+                            cheapest_price = price
+                            best_origin_iata = origin_iata
+                            best_destination_iata = destination_iata
                 
-                if quote['isDirect']:  # Check if the flight is direct
-                    if price < cheapest_direct_price:  # Find the minimum direct price
-                        cheapest_direct_price = price
-                # Always check for the cheapest price regardless of directness
-                if price < cheapest_price:
-                    cheapest_price = price
-            return cheapest_price
-        except KeyError:
-            print("Price not found in the response.")
-            return None
-        else:
-            print(f"Error: {response.status_code}, {response.text}")
-            return None
+                except KeyError:
+                    print("Price not found in the response.")
+                    return None
+            else:
+                print(f"Error: {response.status_code}, {response.text}")
+                return None
+
+    return cheapest_price if cheapest_price != float('inf') else None
 
 
-def query_flight_prices(json_data: str, origin_iata: str, travel_go_date: str, travel_return_date: str):
+def query_flight_prices(json_data: str, origin_city: str, origin_country, travel_go_date: str, travel_return_date: str):
     # Parse the JSON data
     data = json.loads(json_data)
     with open('backend/data/iata.json', 'r') as file:
@@ -91,14 +142,11 @@ def query_flight_prices(json_data: str, origin_iata: str, travel_go_date: str, t
     
     # Iterate over the top recommendations
     for recommendation in data['top_recommendations']:
-        city = recommendation['city']
-        country = recommendation['country']
-        
-        # Here you would need to determine the destination IATA code based on the city and country
-        destination_iata = iata_codes[city]  # You need to implement this function
+        destination_city = recommendation['city']
+        destination_country = recommendation['country']
         
         # Query the flight price
-        price = get_flight_price_return(origin_iata, destination_iata, travel_go_date, travel_return_date)
+        price = get_flight_price_return(origin_city, origin_country, destination_city, destination_country, travel_go_date, travel_return_date)
         
         # Append the price to the list
         prices.append(price)
@@ -107,8 +155,9 @@ def query_flight_prices(json_data: str, origin_iata: str, travel_go_date: str, t
 
 
 if __name__ == "__main__":
-    origin = 'MAD'  # Example IATA code for New York
-    travel_go_date = '2025-08-15'  # Example travel date
+    origin_city = 'Madrid'
+    origin_country = 'Spain'
+    travel_go_date = '2025-08-15'
     travel_return_date = '2025-09-15'
 
     json_data = '''{
@@ -145,8 +194,8 @@ if __name__ == "__main__":
         }
         },
         {
-        "city": "Barcelona",
-        "country": "Spain",
+        "city": "Paris",
+        "country": "France",
         "match_score": 37.7,
         "features": {
             "hiking": 1.0,
@@ -183,7 +232,7 @@ if __name__ == "__main__":
     ]
     }'''
     # Call the query_flight_prices function
-    prices = query_flight_prices(json_data, origin, travel_go_date, travel_return_date)
+    prices = query_flight_prices(json_data, origin_city, origin_country, travel_go_date, travel_return_date)
 
     # Print the results
     if prices:
