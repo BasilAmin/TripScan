@@ -1,0 +1,24 @@
+message_id,user_id,content,timestamp
+1,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Hello,2025-05-03 20:06:14
+2,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,I want to go to eat pasta and have fun in the clubs,2025-05-03 20:06:38
+3,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,I cant go the same dates as you,2025-05-03 20:07:19
+4,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we discuss possible travel dates that work for everyone?,2025-05-03 20:07:25
+5,System,We are processing your request. Please wait...,2025-05-03 20:07:25
+6,System,"The trips are already in the past. No compromise is possible.
+",2025-05-03 20:07:26
+7,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we discuss possible travel dates that work for everyone?,2025-05-03 20:07:55
+8,System,We are processing your request. Please wait...,2025-05-03 20:07:55
+9,System,"October 1st, 2023.
+",2025-05-03 20:07:55
+10,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we discuss possible travel dates that work for everyone?,2025-05-03 20:24:03
+11,System,We are processing your request. Please wait...,2025-05-03 20:24:03
+12,System,"Okay, I'm ready. Please provide the chat log.
+",2025-05-03 20:24:03
+13,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we discuss possible travel dates that work for everyone?,2025-05-03 20:27:20
+14,System,We are processing your request. Please wait...,2025-05-03 20:27:20
+15,System,"Compromise: Start date: 2025-05-21, End date: 2025-05-29.
+",2025-05-03 20:27:20
+16,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we discuss possible travel dates that work for everyone?,2025-05-03 20:35:55
+17,System,We are processing your request. Please wait...,2025-05-03 20:35:55
+18,System,"Compromise: Start Date: 2025-05-21, End Date: 2025-05-29.
+",2025-05-03 20:35:56

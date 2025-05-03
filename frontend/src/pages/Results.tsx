@@ -68,7 +68,7 @@ const Results = () => {
                           <span className="text-gray-500 text-sm ml-1">/ 100</span>
                         </div>
                         <img
-                          src={`https://i.natgeofe.com/k/5b396b5e-59e7-43a6-9448-708125549aa1/new-york-statue-of-liberty_16x9.jpg?w=1200`}
+                          src={destination.imageUrl}
                           alt={destination.city}
                           className="mt-4 rounded-lg shadow-md"
                           style={{ width: '100%', height: 'auto' }}

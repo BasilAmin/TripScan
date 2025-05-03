@@ -19,7 +19,9 @@ def get_city_image_link(city_name):
         data = response.json()
         if not data.get('photos'):
             return f"No images found for {city_name}"
-        return data['photos'][0]['src']['large']
+        print(data['photos'][0]['src']['large'])
+        return(data['photos'][0]['src']['large'])
+        
     except requests.exceptions.RequestException as e:
         return f"Error fetching image: {str(e)}"# Example usage
 
