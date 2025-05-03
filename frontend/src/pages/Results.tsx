@@ -9,11 +9,36 @@ import { useLlmResults } from "@/hooks/useLlmResults";
 const Results = () => {
   const navigate = useNavigate();
   const { destinationScores, isLoading, error } = useLlmResults();
-  
+  const [cityImages, setCityImages] = useState({});
+
   // Sort destinations by score and take top 3
   const topDestinations = [...destinationScores]
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
+
+  // Fetch images for each city
+  useEffect(() => {
+    const fetchImages = async () => {
+      const images = {};
+      for (const destination of topDestinations) {
+        try {
+          const response = await fetch(`/city-image/${destination.city}`);
+          if (response.ok) {
+            const data = await response.json();
+            images[destination.city] = data.image_url;
+          }
+        } catch (err) {
+          console.error(`Failed to fetch image for ${destination.city}:`, err);
+          images[destination.city] = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
+        }
+      }
+      setCityImages(images);
+    };
+
+    if (topDestinations.length > 0) {
+      fetchImages();
+    }
+  }, [topDestinations]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -68,10 +93,12 @@ const Results = () => {
                           <span className="text-gray-500 text-sm ml-1">/ 100</span>
                         </div>
                         <img
-                          src={`https://i.natgeofe.com/k/5b396b5e-59e7-43a6-9448-708125549aa1/new-york-statue-of-liberty_16x9.jpg?w=1200`}
+                          src={cityImages[destination.city] || `https://i.natgeofe.com/k/5b396b5e-59e7-43a6-9448-708125549aa1/new-york-statue-of-liberty_16x9.jpg?w=1200`}
                           alt={destination.city}
-                          className="mt-4 rounded-lg shadow-md"
-                          style={{ width: '100%', height: 'auto' }}
+                          className="mt-4 rounded-lg shadow-md object-cover w-full h-48"
+                          onError={(e) => {
+                            e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
+                          }}
                         />
                       </CardContent>
                     </Card>
