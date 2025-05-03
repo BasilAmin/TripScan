@@ -11,12 +11,17 @@ export const useChat = (userId: string) => {
   // Fetch messages from the server
   const fetchMessages = async () => {
     try {
-      const response = await api.get(`/getMessages`);
+      console.log('Fetching messages...');
+      const response = await api.get(`/getMessages/`);  // Ensure that this matches the FastAPI endpoint
       const fetchedMessages = response.data.map((msg: any) => ({
-        id: msg.message_id,
-        user: { id: msg.user_id, name: msg.user_id === userId ? 'You' : 'Other', avatar: '' },
+        id: msg.message_id,  // You should ensure the response includes message_id
+        user: { 
+          id: msg.user_id, 
+          name: msg.user_id === userId ? 'You' : 'Other', 
+          avatar: '' 
+        },
         content: msg.content,
-        timestamp: new Date(msg.timestamp),
+        timestamp: new Date(msg.timestamp),  // Ensure the response includes a timestamp
         isCurrentUser: msg.user_id === userId,
       }));
       setMessages(fetchedMessages);
@@ -41,7 +46,7 @@ export const useChat = (userId: string) => {
 
     try {
       setIsLoading(true);
-      await api.post(`/sendMessage`, {
+      await api.post(`/sendMessage/`, {
         user_id: userId,
         content,
       });

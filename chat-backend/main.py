@@ -49,7 +49,7 @@ async def send_origin_and_dates(trip_data: TripData):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # o "*" si es para demo
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

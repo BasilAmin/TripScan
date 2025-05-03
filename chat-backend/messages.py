@@ -1,7 +1,7 @@
 import csv
 import os
 from typing import List, Dict
-
+from datetime import datetime
 
 def save_message_to_csv(user_id: str, content: str, file_path: str = "messages.csv") -> int:
     """Saves a message to a CSV file and returns the message_id, which is the row number.
@@ -23,18 +23,22 @@ def save_message_to_csv(user_id: str, content: str, file_path: str = "messages.c
             next(reader, None)
             message_id = sum(1 for row in reader) + 1  # Increment row count for new message_id
 
+    # Get the current timestamp
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Format the timestamp
+
     # Open the CSV file in append mode
     with open(file_path, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         
         # Write the header if the file is empty
         if f.tell() == 0:
-            writer.writerow(["message_id", "user_id", "content"])  # Write header
+            writer.writerow(["message_id", "user_id", "content", "timestamp"])  # Write header
         
-        # Write the message as a new row
-        writer.writerow([message_id, user_id, content])  # Write message with dynamic message_id
+        # Write the message as a new row, including timestamp
+        writer.writerow([message_id, user_id, content, timestamp])  # Write message with timestamp
 
     return message_id
+
 
 
 def read_messages_from_csv(file_path: str = "messages.csv") -> List[Dict[str, str]]:
