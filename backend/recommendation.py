@@ -57,7 +57,7 @@ class RobustCityRecommender:
         agg_prefs = {feat: [] for feat in self.base_features}
         self.vetoed_cities = set()
         
-        for user in [u.dict() if hasattr(u, 'dict') else u for u in users_data]:
+        for user in users_data:
             if 'veto' in user:
                 if isinstance(user['veto'], list):
                     self.vetoed_cities.update(city.lower() for city in user['veto'])
@@ -96,7 +96,7 @@ class RobustCityRecommender:
         
         self.model.fit(np.array(X_train), np.array(y_train))
 
-    def recommend(self, preferences, top_k=3):
+    def recommend(self, preferences, top_k=10):
         """Get recommendations with veto handling"""
         try:
             vec = np.zeros(len(self.base_features))
