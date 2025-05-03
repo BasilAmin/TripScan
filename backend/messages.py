@@ -80,6 +80,7 @@ def load_trip_data_from_csv(file_path: str) -> list[TripData]:
         df = pd.read_csv(file_path)
         for index, row in df.iterrows():
             trip = TripData(
+                user_id=row['user_id'],
                 origin_city=row['origin_city'],
                 start_date=row['start_date'],
                 end_date=row['end_date']
