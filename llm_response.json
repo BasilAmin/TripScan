@@ -4,11 +4,11 @@
     "tags": [
       {
         "tag": "food",
-        "score": 9
+        "score": 7
       },
       {
         "tag": "hiking",
-        "score": 10
+        "score": 1
       },
       {
         "tag": "english_friendly",
@@ -16,7 +16,7 @@
       },
       {
         "tag": "nightlife",
-        "score": 1
+        "score": 3
       },
       {
         "tag": "culture",
@@ -24,7 +24,7 @@
       },
       {
         "tag": "safety",
-        "score": 7
+        "score": 5
       },
       {
         "tag": "affordability",
@@ -32,27 +32,25 @@
       },
       {
         "tag": "public_transit",
-        "score": 3
+        "score": 5
       },
       {
         "tag": "walkability",
-        "score": 3
+        "score": 5
       },
       {
         "tag": "cleanliness",
-        "score": 4
+        "score": 5
       },
       {
         "tag": "beaches",
-        "score": 1
+        "score": 3
       },
       {
         "tag": "city_cluster",
-        "score": 1
+        "score": 5
       }
     ],
-    "veto": [
-      "New York"
-    ]
+    "veto": []
   }
 ]

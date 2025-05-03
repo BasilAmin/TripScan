@@ -14,12 +14,12 @@ warnings.filterwarnings('ignore')
 class RobustCityRecommender:
     def __init__(self, data_path):
         # Load and validate city data
-        self.df = pd.read_csv(data_path)
+        self.df = pd.read_csv(data_path, encoding='latin1')
         
         # Load and filter cities from location.csv
-        location_df = pd.read_csv('location.csv')
+        location_df = pd.read_csv('location.csv', encoding='latin1')
         self.df = self.df[self.df['city'].isin(location_df['City'])]
-        
+            
         self._validate_data()
         
         # Prepare features
@@ -129,7 +129,7 @@ class RobustCityRecommender:
         except Exception as e:
             print(f"Recommendation error: {e}")
             # Fallback to random cities from location.csv
-            location_df = pd.read_csv('location.csv')
+            location_df = pd.read_csv('location.csv',encoding='latin1')
             fallback_cities = location_df['City'].sample(min(10, len(location_df))).tolist()
             return [{
                 'city': city,
