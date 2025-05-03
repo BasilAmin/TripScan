@@ -15,10 +15,6 @@ def read_root():
 def health_check():
     return {"status": "healthy"}
 
-app = FastAPI()
-
-messageID = 0
-
 @app.get("/getMessages/")
 async def get_messages():
     messages = read_messages_from_csv()
@@ -26,7 +22,6 @@ async def get_messages():
 
 @app.post("/sendMessage/")
 async def send_message(message: Message):
-    global messageID
     """Endpoint to send a message and save it to a CSV file."""
     messageID = save_message_to_csv(message.user_id, message.content)
     return {"status": "Message sent", "message_id": messageID}
