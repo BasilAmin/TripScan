@@ -59,7 +59,7 @@ const TravelBanner = () => {
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full w-full md:w-auto"
           >
             <Plane className="mr-2 h-4 w-4" />
-            Find Flights
+            Save Preferences
           </Button>
         </div>
       </div>

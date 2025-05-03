@@ -43,7 +43,7 @@ async def send_message(message: Message, background_tasks: BackgroundTasks):
 @app.post("/sendOriginAndDates/")
 async def send_origin_and_dates(trip_data: TripData):
     """Endpoint to send origin city and trip dates and save them to a CSV file."""
-    save_trip_data_to_csv(trip_data.origin_city, trip_data.start_date, trip_data.end_date)
+    save_trip_data_to_csv(trip_data.user_id,trip_data.origin_city, trip_data.start_date, trip_data.end_date)
     return {"status": "Trip data saved", "origin_city": trip_data.origin_city, "start_date": trip_data.start_date, "end_date": trip_data.end_date}
 
 @app.get("/recommendations/")
