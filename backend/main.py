@@ -31,18 +31,6 @@ async def send_message(message: Message):
     messageID = save_message_to_csv(message.user_id, message.content)
     return {"status": "Message sent", "message_id": messageID}
 
-def save_trip_data_to_csv(origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
-    """Saves trip data to a CSV file."""
-    with open(file_path, mode='a', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        
-        # Write the header if the file is empty
-        if f.tell() == 0:
-            writer.writerow(["origin_city", "start_date", "end_date"])  # Write header
-        
-        # Write the trip data as a new row
-        writer.writerow([origin_city, start_date, end_date])  # Write trip data
-
 @app.post("/sendOriginAndDates/")
 async def send_origin_and_dates(trip_data: TripData):
     """Endpoint to send origin city and trip dates and save them to a CSV file."""
