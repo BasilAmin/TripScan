@@ -15,6 +15,11 @@ class RobustCityRecommender:
     def __init__(self, data_path):
         # Load and validate city data
         self.df = pd.read_csv(data_path)
+        
+        # Load and filter cities from location.csv
+        location_df = pd.read_csv('location.csv')
+        self.df = self.df[self.df['city'].isin(location_df['City'])]
+        
         self._validate_data()
         
         # Prepare features
@@ -32,7 +37,7 @@ class RobustCityRecommender:
     def _validate_data(self):
         """Ensure data is clean and valid"""
         if self.df.empty:
-            raise ValueError("City data is empty")
+            raise ValueError("City data is empty after filtering with location.csv")
         if self.df.isnull().values.any():
             self.df = self.df.fillna(self.df.median())
 
@@ -82,27 +87,16 @@ class RobustCityRecommender:
                 final_prefs[feat] = np.nanmean(values) if values else 0
         return final_prefs
 
-    def train(self, default_cities=['Barcelona', 'Tokyo', 'Paris']):
-        """Enhanced training using all cities with similarity-based approach"""
-        # We'll keep this function for compatibility but won't actually use the MLP for recommendations
-        # The MLP training is maintained for backward compatibility
-        X_train = []
-        y_train = []
+    def train(self, default_cities=None):
+        """Train using all cities from location.csv"""
+        # Use all available cities for training
+        X_train = self.X
+        y_train = np.arange(len(self.df))  # Each city is its own class
         
-        for city in default_cities:
-            if city in self.city_to_idx:
-                city_data = self.df.iloc[self.city_to_idx[city]][self.base_features].values
-                poly_vec = self.poly.transform(city_data.reshape(1, -1))
-                X_train.append(poly_vec[0])
-                y_train.append(self.city_to_idx[city])
-        
-        if not X_train:
-            raise ValueError("No valid training cities found")
-        
-        self.model.fit(np.array(X_train), np.array(y_train))
+        self.model.fit(X_train, y_train)
 
     def recommend(self, preferences, top_k=10):
-        """Improved recommendation using cosine similarity"""
+        """Get top 10 recommendations from location.csv"""
         try:
             # Create user preference vector
             user_vec = np.array([preferences.get(feat, 0) for feat in self.base_features])
@@ -116,7 +110,7 @@ class RobustCityRecommender:
                 self.X_scaled
             )[0]
             
-            # Get top recommendations excluding vetoed cities
+            # Get top 10 recommendations excluding vetoed cities
             recommendations = []
             for idx in np.argsort(similarities)[::-1]:
                 city_name = str(self.df.iloc[idx]['city']).lower()
@@ -134,15 +128,19 @@ class RobustCityRecommender:
         
         except Exception as e:
             print(f"Recommendation error: {e}")
-            # Fallback to default cities if error occurs
+            # Fallback to random cities from location.csv
+            location_df = pd.read_csv('location.csv')
+            fallback_cities = location_df['City'].sample(min(10, len(location_df))).tolist()
             return [{
                 'city': city,
-                'country': self.df[self.df['city'] == city]['country'].values[0],
+                'country': location_df[location_df['City'] == city]['Country'].values[0],
                 'match_score': 80.0,
                 'features': {f: float(self.df[self.df['city'] == city][f].values[0]) 
+                           if city in self.city_to_idx else 0
                            for f in preferences.keys()}
-            } for city in ['Barcelona', 'Tokyo', 'Paris', 'New York', 'London', 
-                          'Berlin', 'Sydney', 'Singapore', 'Dubai', 'Rome'][:top_k]]
+            } for city in fallback_cities[:top_k]]
+
+# Rest of the code remains exactly the same...
 
 def generate_recommendations(users_data):
     """Main function to generate recommendations"""
