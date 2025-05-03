@@ -9,7 +9,7 @@ def get_city_image_link(city_name):
     """
     try:
         # Pexels API endpoint (no key needed)
-        url = f"https://api.pexels.com/v1/search?query={city_name}+city&per_page=1"        # Make the request with default headers
+        url = f"https://api.pexels.com/v1/search?query={city_name}+city+skyline&per_page=1"        # Make the request with default headers
         headers = {
             "Authorization": "uf8L1WVvEn7L6obVPlw8JZv1VXE6LkVTegXKbZeJAsx5vFCGMIEcBqRL"
         }
