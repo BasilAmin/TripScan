@@ -2,6 +2,7 @@ from .messages import *
 from .chat import *
 import asyncio
 import json
+from prices import *
 from typing import List
 from .models import TravelPreference  # Import the model for type hints
 from .recommendation import RobustCityRecommender, generate_recommendations  # Import the recommender class
@@ -23,12 +24,15 @@ async def main_process():
         recommendations = generate_recommendations(llm_json)
         print("Recommendations generated successfully:")
         print(recommendations)
-
-        # Step 4: Calling SkyScanner API
     except ImportError:
         print("Error: recommendation.py not found")
     except Exception as e:
         print(f"Error running recommendation script: {e}")
+    
+    # Step 4: Calling SkyScanner API
+    with open('recommendation/output.json', 'r') as json_data:
+        query_flight_prices(json_data, origin_city, origin_country, travel_go_date, travel_return_date)
+    
 
 # Run the main process
 if __name__ == "__main__":
