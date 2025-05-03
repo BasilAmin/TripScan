@@ -3,8 +3,8 @@ import { useChat } from '@/hooks/useChat';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Users } from "lucide-react";
 import { getOrCreateUserId} from "@/lib/utils";
+import { Brain, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -13,6 +13,14 @@ const user_id = getOrCreateUserId();
 const GroupChat = () => {
   const { messages, sendMessage, currentUser, isLoading } = useChat(user_id);
   const navigate = useNavigate();
+
+  const handleThinkingRequest = () => {
+    sendMessage("I need some time to think about these travel options...");
+  };
+
+  const handleNegotiateDates = () => {
+    sendMessage("Can we discuss possible travel dates that work for everyone?");
+  };
 
   return (
     <Card className="mt-8 border shadow-sm">
@@ -26,6 +34,26 @@ const GroupChat = () => {
                 {messages.length > 0 ? `${messages.length} messages` : 'No messages yet'}
               </CardDescription>
             </div>
+            </div>
+          <div className="flex space-x-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center gap-1"
+              onClick={handleThinkingRequest}
+            >
+              <Brain className="h-4 w-4" />
+              <span className="hidden sm:inline">Think</span>
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center gap-1"
+              onClick={handleNegotiateDates}
+            >
+              <Calendar className="h-4 w-4" />
+              <span className="hidden sm:inline">Negotiate Dates</span>
+            </Button>
           </div>
         </div>
       </CardHeader>

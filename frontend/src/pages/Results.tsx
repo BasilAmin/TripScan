@@ -63,10 +63,16 @@ const Results = () => {
                         <h3 className="text-xl font-bold">{destination.city}</h3>
                         <div className="mt-2">
                           <span className="text-3xl font-bold">
-                            {Math.round(destination.score * 100)}
+                            {Math.round(destination.score)}
                           </span>
                           <span className="text-gray-500 text-sm ml-1">/ 100</span>
                         </div>
+                        <img
+                          src={`https://i.natgeofe.com/k/5b396b5e-59e7-43a6-9448-708125549aa1/new-york-statue-of-liberty_16x9.jpg?w=1200`}
+                          alt={destination.city}
+                          className="mt-4 rounded-lg shadow-md"
+                          style={{ width: '100%', height: 'auto' }}
+                        />
                       </CardContent>
                     </Card>
                   ))}
@@ -86,14 +92,14 @@ const Results = () => {
                       <TableRow key={destination.city}>
                         <TableCell className="font-medium">#{index + 1}</TableCell>
                         <TableCell>{destination.city}</TableCell>
-                        <TableCell>{Math.round(destination.score * 100)}/100</TableCell>
+                        <TableCell>{Math.round(destination.score)}/100</TableCell>
                         <TableCell>
                           <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div
                               className={`h-2.5 rounded-full ${
                                 index === 0 ? 'bg-primary' : index === 1 ? 'bg-blue-400' : 'bg-blue-300'
                               }`}
-                              style={{ width: `${destination.score * 100}%` }}
+                              style={{ width: `${destination.score}%` }}
                             ></div>
                           </div>
                         </TableCell>
