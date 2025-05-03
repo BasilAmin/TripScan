@@ -4,14 +4,15 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { getOrCreateUserId} from "@/lib/utils";
-import { Brain, Calendar, Users } from "lucide-react";
+import { Brain, Calendar, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/components/ui/sonner";
 
 const user_id = getOrCreateUserId();
 
 const GroupChat = () => {
-  const { messages, sendMessage, currentUser, isLoading } = useChat(user_id);
+  const { messages, sendMessage, currentUser, isLoading, clearMessages} = useChat(user_id);
   const navigate = useNavigate();
 
   const handleThinkingRequest = () => {
@@ -20,6 +21,11 @@ const GroupChat = () => {
 
   const handleNegotiateDates = () => {
     sendMessage("Can we discuss possible travel dates that work for everyone?");
+  };
+
+  const handleClearConversation = () => {
+    clearMessages();
+    toast.success("Conversation cleared");
   };
 
   return (
@@ -36,6 +42,15 @@ const GroupChat = () => {
             </div>
             </div>
           <div className="flex space-x-2">
+          <Button 
+              variant="outline" 
+              size="sm" 
+              className="flex items-center gap-1 text-red-500 hover:bg-red-50 hover:text-red-600"
+              onClick={handleClearConversation}
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="hidden sm:inline">Clear</span>
+            </Button>
             <Button 
               variant="outline" 
               size="sm" 

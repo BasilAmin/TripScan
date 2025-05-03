@@ -71,11 +71,21 @@ export const useChat = (userId: string) => {
     return () => clearInterval(interval);
   }, [userId]);
 
+  // Add clearMessages function to reset chat to empty
+  const clearMessages = async () => {
+    try {
+      await api.get('/clear_chat');
+      setMessages([]);
+    } catch (error) {
+      console.error('Error clearing messages:', error);
+    }
+  };
 
   return {
     messages,
     sendMessage,
     currentUser,
     isLoading,
+    clearMessages,
   };
 };

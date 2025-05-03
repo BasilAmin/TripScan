@@ -7,6 +7,7 @@ from .messages import *
 from .orchestrator import *
 from datetime import datetime
 from .image import get_city_image_link
+import os
 
 app = FastAPI()
 
@@ -75,6 +76,22 @@ async def get_city_image(city_name: str):
     try:
         image_url = get_city_image_link(city_name)
         return {"image_url": image_url}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@app.get("/clear_chat")
+async def clear_chat():
+    """
+    Endpoint to clear all the chat information
+    """
+    try:
+        files_to_delete = ["output.json", "trips.csv", "messages.csv"]
+        for file in files_to_delete:
+            if os.path.exists(file):
+                os.remove(file)
+        return {"detail": "Chat data cleared."}
     except HTTPException as e:
         raise e
     except Exception as e:
