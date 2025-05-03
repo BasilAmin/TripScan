@@ -1,14 +1,13 @@
 import csv
-import os
 from typing import List, Dict
 
-def save_message_to_csv(chat_id: str, user_id: str, content: str, file_path: str = "messages.csv"):
+def save_message_to_csv(user_id: str, content: str, message_id: int, file_path: str = "messages.csv"):
     """Saves a message to a CSV file.
 
     Args:
-        chat_id (str): The ID of the chat.
         user_id (str): The ID of the user sending the message.
         content (str): The content of the message.
+        message_id (int): The unique ID for the message.
         file_path (str): The path to the CSV file. Defaults to "messages.csv".
     """
     # Open the CSV file in append mode
@@ -17,10 +16,10 @@ def save_message_to_csv(chat_id: str, user_id: str, content: str, file_path: str
         
         # Write the header if the file is empty
         if f.tell() == 0:
-            writer.writerow(["chat_id", "user_id", "content"])  # Write header
+            writer.writerow(["message_id", "user_id", "content"])  # Write header
         
         # Write the message as a new row
-        writer.writerow([chat_id, user_id, content])  # Write message
+        writer.writerow([message_id, user_id, content])  # Write message
 
 
 def read_messages_from_csv(file_path: str = "messages.csv") -> List[Dict[str, str]]:
@@ -44,6 +43,7 @@ def read_messages_from_csv(file_path: str = "messages.csv") -> List[Dict[str, st
 
 # Example usage
 if __name__ == "__main__":
+    # Read all messages from the CSV file
     messages = read_messages_from_csv()
     for message in messages:
         print(message)

@@ -11,7 +11,7 @@ export const useChat = (userId: string) => {
   // Fetch messages from the server
   const fetchMessages = async () => {
     try {
-      const response = await api.get(`/api/chats/messages`);
+      const response = await api.get(`/getMessages`);
       const fetchedMessages = response.data.map((msg: any) => ({
         id: msg.message_id,
         user: { id: msg.user_id, name: msg.user_id === userId ? 'You' : 'Other', avatar: '' },
@@ -41,7 +41,7 @@ export const useChat = (userId: string) => {
 
     try {
       setIsLoading(true);
-      await api.post(`/api/chats/messages`, {
+      await api.post(`/sendMessage`, {
         user_id: userId,
         content,
       });
