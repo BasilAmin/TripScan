@@ -2,14 +2,17 @@
 import { useChat } from '@/hooks/useChat';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import { getOrCreateUserId} from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const user_id = getOrCreateUserId();
 
 const GroupChat = () => {
   const { messages, sendMessage, currentUser, isLoading } = useChat(user_id);
+  const navigate = useNavigate();
 
   return (
     <Card className="mt-8 border shadow-sm">
@@ -32,6 +35,16 @@ const GroupChat = () => {
         </div>
         <MessageInput onSendMessage={sendMessage} disabled={isLoading} />
       </CardContent>
+      <CardFooter className="border-t p-4 bg-gray-50">
+        <div className="w-full flex justify-center">
+          <Button 
+            onClick={() => navigate('/results')}
+            className="bg-primary hover:bg-primary/90"
+          >
+            See Travel Recommendations
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 };
