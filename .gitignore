@@ -8,6 +8,9 @@ logs/
 yarn-debug.log*
 yarn-error.log*
 
+# Virtual environment
+.venv
+
 # Environment variables
 .env
 
