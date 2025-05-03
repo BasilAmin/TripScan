@@ -35,10 +35,10 @@ const CitySearch = ({ value, onChange, placeholder = "Search cities..." }: CityS
           variant="outline" 
           role="combobox" 
           aria-expanded={open}
-          className="w-full justify-between border-none shadow-sm hover:bg-gray-50"
+          className="w-full justify-between border-none shadow-sm hover:bg-gray-50  text-gray-500"
         >
           {value ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ">
               <MapPin className="h-4 w-4 text-muted-foreground" />
               <span>{value.name}</span>
               <span className="text-xs text-muted-foreground">({value.code})</span>

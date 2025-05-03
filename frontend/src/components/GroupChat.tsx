@@ -4,9 +4,12 @@ import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users } from "lucide-react";
+import { getOrCreateUserId} from "@/lib/utils";
+
+const user_id = getOrCreateUserId();
 
 const GroupChat = () => {
-  const { messages, sendMessage, currentUser, isLoading } = useChat();
+  const { messages, sendMessage, currentUser, isLoading } = useChat(user_id);
 
   return (
     <Card className="mt-8 border shadow-sm">

@@ -24,7 +24,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           <Button
             id="date"
             variant={"outline"}
-            className="w-full justify-start border-none shadow-sm hover:bg-gray-50"
+            className="w-full justify-start border-none shadow-sm hover:bg-gray-50 text-gray-500"
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {dateRange?.from ? (
