@@ -71,7 +71,7 @@ const Results = () => {
                           src={destination.imageUrl}
                           alt={destination.city}
                           className="mt-4 rounded-lg shadow-md"
-                          style={{ width: '100%', height: 'auto' }}
+                          style={{ width: '100%', height: '300px', objectFit: 'cover' }}
                         />
                       </CardContent>
                     </Card>
