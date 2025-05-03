@@ -15,7 +15,7 @@ const GroupChat = () => {
   const navigate = useNavigate();
 
   const handleThinkingRequest = () => {
-    sendMessage("I need some time to think about these travel options...");
+    sendMessage("Can we get some recommendations?");
   };
 
   const handleNegotiateDates = () => {

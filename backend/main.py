@@ -27,7 +27,7 @@ async def send_message(message: Message, background_tasks: BackgroundTasks):
     """Endpoint to send a message and save it to a CSV file."""
     messageID = save_message_to_csv(message.user_id, message.content)
     # Check if the message is "/start" to trigger LLM processing
-    if(message.content == "/start"):
+    if(message.content == "Can we get some recommendations?"):
         messageID = save_message_to_csv("System", "We are processing your request. Please wait...")
         # Call the orchestrator function to process the messages and trip data
         background_tasks.add_task(main_process)  
