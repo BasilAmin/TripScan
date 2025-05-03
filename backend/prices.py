@@ -56,18 +56,19 @@ def get_flight_price(api_key: str, origin_iata: str, destination_iata: str, trav
         # Extract the price of the cheapest direct flight
         try:
             quotes = data['content']['results']['quotes']
-            cheapest_price = float('inf')  # Start with a very high price
+            cheapest_direct_price = float('inf')  # Start with a very high price for direct flights
+            cheapest_price = float('inf')  # Start with a very high price for all flights
+            
             for quote_key in quotes:
                 quote = quotes[quote_key]
+                price = int(quote['minPrice']['amount'])
+                
                 if quote['isDirect']:  # Check if the flight is direct
-                    price = int(quote['minPrice']['amount'])
-                    if price < cheapest_price:  # Find the minimum price
-                        cheapest_price = price
-            
-            if cheapest_price == float('inf'):
-                print("No direct flights found.")
-                return None
-            
+                    if price < cheapest_direct_price:  # Find the minimum direct price
+                        cheapest_direct_price = price
+                # Always check for the cheapest price regardless of directness
+                if price < cheapest_price:
+                    cheapest_price = price
             return cheapest_price
         except KeyError:
             print("Price not found in the response.")
@@ -77,13 +78,115 @@ def get_flight_price(api_key: str, origin_iata: str, destination_iata: str, trav
             return None
 
 
+def query_flight_prices(api_key: str, json_data: str, origin_iata: str, travel_date: str):
+    # Parse the JSON data
+    data = json.loads(json_data)
+    with open('backend/iata.json', 'r') as file:
+        iata_codes = json.load(file)
+    # Initialize an array to hold the prices
+    prices = [] 
+    
+    # Iterate over the top recommendations
+    for recommendation in data['top_recommendations']:
+        city = recommendation['city']
+        country = recommendation['country']
+        
+        # Here you would need to determine the destination IATA code based on the city and country
+        destination_iata = iata_codes[city]  # You need to implement this function
+        
+        # Query the flight price
+        price = get_flight_price(api_key, origin_iata, destination_iata, travel_date)
+        
+        # Append the price to the list
+        prices.append(price)
+    
+    return prices
+
+
 if __name__ == "__main__":
-    origin = 'JFK'  # Example IATA code for New York
-    destination = 'BCN'  # Example IATA code for Los Angeles
+    origin = 'MAD'  # Example IATA code for New York
     travel_date = '2025-08-15'  # Example travel date
 
-    price = get_flight_price(API_KEY, origin, destination, travel_date)
-    if price is not None:
-        print(f"The price for the flight is: {price}€.")
+    json_data = '''{
+    "aggregate_preferences": {
+        "hiking": 0.07245898866903433,
+        "food": 0.09703619144258413,
+        "nightlife": 0.053014544224589885,
+        "safety": 0.10830373752748182,
+        "culture": 0.09896414679519702,
+        "beaches": 0.061466260781329274,
+        "walkability": 0.09182732961271774,
+        "public_transit": 0.070645188567563,
+        "cleanliness": 0.10004650769490953,
+        "affordability": 0.08137155420260442,
+        "english_friendly": 0.08658041603247082
+    },
+    "top_recommendations": [
+        {
+        "city": "New York",
+        "country": "USA",
+        "match_score": 44.0,
+        "features": {
+            "hiking": 4.0,
+            "food": 10.0,
+            "nightlife": 10.0,
+            "safety": 10.0,
+            "culture": 5.0,
+            "beaches": 8.0,
+            "walkability": 3.0,
+            "public_transit": 6.0,
+            "cleanliness": 7.0,
+            "affordability": 7.0,
+            "english_friendly": 4.0
+        }
+        },
+        {
+        "city": "Barcelona",
+        "country": "Spain",
+        "match_score": 37.7,
+        "features": {
+            "hiking": 1.0,
+            "food": 4.0,
+            "nightlife": 6.0,
+            "safety": 1.0,
+            "culture": 2.0,
+            "beaches": 2.0,
+            "walkability": 7.0,
+            "public_transit": 5.0,
+            "cleanliness": 4.0,
+            "affordability": 3.0,
+            "english_friendly": 6.0
+        }
+        },
+        {
+        "city": "Tokyo",
+        "country": "Japan",
+        "match_score": 18.3,
+        "features": {
+            "hiking": 7.0,
+            "food": 2.0,
+            "nightlife": 6.0,
+            "safety": 6.0,
+            "culture": 7.0,
+            "beaches": 3.0,
+            "walkability": 1.0,
+            "public_transit": 6.0,
+            "cleanliness": 7.0,
+            "affordability": 1.0,
+            "english_friendly": 4.0
+        }
+        }
+    ]
+    }'''
+    # Call the query_flight_prices function
+    prices = query_flight_prices(API_KEY, json_data, origin, travel_date)
+
+    # Print the results
+    if prices:
+        for i, price in enumerate(prices):
+            if price is not None:
+                print(f"The price for the flight to {json.loads(json_data)['top_recommendations'][i]['city']} is: {price}€.")
+            else:
+                print(f"Could not retrieve the flight price for {json.loads(json_data)['top_recommendations'][i]['city']}.")
     else:
-        print("Could not retrieve the flight price.")
+        print("Could not retrieve any flight prices.")
