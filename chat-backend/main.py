@@ -3,6 +3,12 @@ from messages import *
 
 app = FastAPI()
 
+class Message(BaseModel):
+    message_id: str
+    user_id: str
+    content: str
+    timestamp: str
+
 @app.get("/getMessages/")
 async def get_messages():
     messages = read_messages_from_csv()
