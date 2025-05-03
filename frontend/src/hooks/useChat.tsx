@@ -12,7 +12,9 @@ export const useChat = (userId: string) => {
   const fetchMessages = async () => {
     try {
       console.log('Fetching messages...');
+      console.log(api.defaults.baseURL);  // Log the base URL to ensure it's correct
       const response = await api.get(`/getMessages/`);  // Ensure that this matches the FastAPI endpoint
+      console.log('Fetched data:', response.data);
       const fetchedMessages = response.data.map((msg: any) => ({
         id: msg.message_id,  // You should ensure the response includes message_id
         user: { 
