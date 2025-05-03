@@ -4,6 +4,7 @@ import asyncio
 import json
 from typing import List
 from .models import TravelPreference  # Import the model for type hints
+from .recommendation import RobustCityRecommender, generate_recommendations  # Import the recommender class
 
 async def main_process():
     # Step 1: Get formatted input from CSV files
@@ -12,17 +13,18 @@ async def main_process():
     # Step 2: Get JSON response from Gemini
     llm_json: List[TravelPreference] = await chat_with_gemini(llm_message)
     
-    # Step 3: Save the JSON output to input.json
-    with open('input.json', 'w') as f:
-        # Convert Pydantic models to dict first
-        json.dump([pref.dict() for pref in llm_json], f, indent=2)
-    
-    # Step 4: Call the recommendation script
+    # Save the JSON response to a file for debugging
+    llm_json_dict = [pref.dict() for pref in llm_json]
+    with open('llm_response.json', 'w') as f:
+            json.dump(llm_json_dict, f, indent=2)
+
+    # Step 3: Call the recommendation script
     try:
-        import recommendation  # Assuming recommendation.py is in the same directory
-        recommendations = recommendation.generate_recommendations('input.json')
+        recommendations = generate_recommendations(llm_json)
         print("Recommendations generated successfully:")
         print(recommendations)
+
+        # Step 4: Calling SkyScanner API
     except ImportError:
         print("Error: recommendation.py not found")
     except Exception as e:

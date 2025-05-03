@@ -1,0 +1,101 @@
+city,country,food,hiking,english_friendly,nightlife,culture,safety,affordability,public_transit,walkability,cleanliness,beaches,city_cluster
+Barcelona,Spain,9,6,6,9,9,9,6,9,7,7,4,1
+Paris,France,10,3,5,8,10,7,5,7,6,7,3,1
+London,UK,8,4,10,8,9,9,3,9,5,7,4,1
+Tokyo,Japan,10,7,4,8,10,9,7,6,5,6,1,1
+Singapore,Singapore,9,2,9,7,7,8,6,8,8,6,4,1
+New York,USA,10,5,10,9,9,9,6,7,6,7,3,1
+Vancouver,Canada,7,9,10,6,7,8,4,8,8,8,1,4
+Sydney,Australia,8,7,10,7,8,9,5,6,8,6,2,1
+Coopershire,Uzbekistan,6,3,2,3,8,7,3,7,6,6,6,3
+Elizabethfurt,France,6,4,6,5,6,8,3,3,4,6,6,2
+East Alex,Kuwait,8,5,2,4,4,7,7,7,5,6,1,3
+Waltersside,Chad,3,7,2,4,6,5,4,3,4,8,2,0
+Danielfort,Kiribati,5,6,8,7,4,7,3,4,5,7,4,4
+Kennedyside,Marshall Islands,5,6,3,7,6,5,7,5,4,5,3,0
+South Justinville,Saint Vincent and the Grenadines,4,5,8,6,5,7,2,5,4,8,3,2
+Shanemouth,Serbia,6,2,8,7,5,6,3,6,5,7,5,2
+South Larry,Holy See (Vatican City State),8,5,3,7,7,5,4,3,5,7,2,3
+Alexanderview,Tuvalu,7,5,5,4,8,5,5,3,5,6,6,3
+New Andrea,Cocos (Keeling) Islands,3,5,5,4,6,8,5,5,7,5,5,2
+Warrenbury,Cuba,4,2,4,5,8,6,2,4,4,7,5,2
+New Lauraberg,Trinidad and Tobago,5,6,2,5,7,7,3,3,7,5,4,0
+Woodwardfort,Iraq,8,3,3,3,8,6,7,4,4,6,1,3
+Ashleyfurt,Liechtenstein,4,7,2,5,6,5,7,5,5,7,1,0
+East Lisashire,Gambia,8,7,7,5,4,7,5,7,6,8,5,4
+West Kimberlyshire,Morocco,5,8,2,3,7,5,2,7,6,7,1,0
+Elizabethside,Mongolia,4,3,7,7,6,8,6,3,7,7,6,2
+Christophershire,Australia,6,5,2,3,7,5,4,4,6,7,6,3
+Sarahbury,Jamaica,4,2,8,8,5,7,7,3,7,8,1,2
+Port Marcusview,Algeria,3,2,5,3,4,5,5,5,7,7,2,2
+East Joshuaton,Timor-Leste,7,5,2,8,5,7,6,6,7,7,4,0
+Karenstad,Bahamas,7,6,7,7,7,7,6,5,5,8,5,4
+South Coltontown,Cook Islands,5,6,8,5,4,8,3,3,5,8,2,4
+South Annaton,Isle of Man,7,7,3,7,7,7,6,7,5,7,1,0
+Andrewchester,Qatar,6,3,8,4,6,8,7,7,6,6,4,2
+Lake Marcusburgh,Taiwan,5,4,7,8,7,6,5,5,7,8,6,2
+Antoniomouth,Timor-Leste,7,8,2,6,8,5,5,3,5,8,5,0
+Port Brandonborough,Greece,8,7,5,7,8,6,4,4,7,6,6,4
+North Grant,Kazakhstan,4,4,6,7,6,6,4,3,6,6,1,2
+Vanceberg,Vietnam,4,4,7,7,4,8,6,6,6,5,5,2
+Aliciaville,United States of America,5,5,3,6,7,6,6,3,4,5,4,0
+New Alexander,United States Virgin Islands,3,3,4,7,7,8,5,4,6,7,4,2
+New Noah,Poland,8,4,5,5,4,5,3,7,4,6,2,3
+Lake Brad,Mayotte,4,3,5,8,7,7,3,4,7,7,5,2
+West Charlestown,El Salvador,5,8,2,6,6,7,3,5,6,5,4,0
+South David,Venezuela,5,6,4,7,5,8,4,3,5,7,1,0
+Mendezstad,Wallis and Futuna,8,7,2,7,6,8,3,7,7,5,6,0
+Martinezbury,Ethiopia,3,5,8,6,7,7,7,4,6,6,3,2
+East Michelleshire,Guadeloupe,5,7,4,6,4,8,7,6,7,7,4,0
+North Laurenport,Liberia,8,2,7,8,8,8,5,7,7,5,4,1
+Williamston,Luxembourg,7,7,5,5,6,7,4,4,6,6,6,4
+Sweeneyview,Sierra Leone,8,4,4,5,8,5,6,3,6,5,4,3
+Johnberg,Svalbard & Jan Mayen Islands,6,7,7,4,7,8,3,3,4,8,5,4
+Ashleyberg,Romania,7,5,4,4,5,6,4,5,4,8,1,3
+Ryanville,Togo,7,4,7,5,7,5,3,6,5,7,1,4
+Port Michael,Singapore,5,8,4,7,5,7,5,6,6,8,6,0
+West Sarahshire,Ecuador,5,3,4,7,4,8,2,4,6,8,1,2
+Christinaview,El Salvador,7,2,5,3,5,6,3,6,4,5,5,3
+North Jennifer,Liberia,3,6,8,8,8,7,5,7,5,6,3,2
+Allenville,Albania,7,5,6,3,6,6,2,5,5,5,1,3
+Emilymouth,Trinidad and Tobago,4,3,5,4,8,8,3,4,7,8,5,2
+North Jamesmouth,Greece,4,2,4,3,8,7,5,3,6,5,3,3
+South Shannon,Afghanistan,5,6,5,3,6,8,3,3,4,5,4,4
+Port James,Korea,3,5,7,6,6,7,6,5,5,7,4,2
+New Lisa,Gibraltar,3,8,5,7,5,7,6,7,5,5,1,0
+Juliatown,Slovenia,3,8,3,3,5,6,5,6,7,5,2,0
+Lake Wesley,Uganda,6,3,7,8,5,8,5,5,5,8,3,2
+Lake Brian,Lebanon,5,2,8,6,6,5,4,3,4,8,5,2
+Gomezborough,Sudan,7,4,8,5,4,6,7,3,5,6,6,2
+Lake Melanieview,Sierra Leone,5,8,4,7,5,8,4,7,4,6,3,0
+Kathyburgh,Mali,6,6,6,5,6,8,5,6,5,5,1,4
+Andersonfurt,Brunei Darussalam,4,2,4,6,5,5,2,5,4,7,1,2
+West Wayne,Solomon Islands,3,2,3,6,5,5,7,7,5,6,1,2
+Lake Melissafurt,Marshall Islands,3,6,8,8,4,6,5,4,4,7,5,2
+Kimberlyburgh,Ukraine,6,8,7,3,6,6,5,6,5,5,3,4
+Heatherville,Bermuda,4,5,2,5,4,5,2,6,4,6,3,0
+Silvashire,Dominican Republic,5,6,4,7,4,5,4,7,5,6,3,0
+Heatherside,Malaysia,7,3,2,7,6,8,2,6,7,6,4,3
+Farmerburgh,Somalia,7,8,4,8,6,6,3,5,6,7,1,0
+Davidside,Chad,8,3,5,4,5,5,2,4,6,8,1,3
+Lake Keith,Martinique,4,4,2,3,8,5,5,5,6,8,4,3
+Schwartzshire,Saint Vincent and the Grenadines,8,6,5,7,7,7,5,4,4,5,3,4
+South Daniel,Portugal,4,7,5,5,4,5,3,7,7,6,4,0
+East Peterborough,Aruba,6,4,5,7,8,8,3,6,5,7,5,2
+Erinborough,Haiti,5,8,2,7,4,8,5,6,5,6,6,0
+Lake Derek,Netherlands Antilles,8,3,4,7,5,7,4,6,7,7,3,3
+New Amanda,Somalia,4,4,5,7,7,5,7,3,5,6,3,2
+Coxfort,Iran,6,3,3,5,6,6,4,4,7,8,4,3
+South Donaldbury,Benin,7,5,4,7,6,8,5,4,7,8,3,3
+Bethanyhaven,Armenia,3,8,8,5,7,7,7,3,7,5,4,4
+Bethfurt,India,4,2,8,3,8,5,7,5,6,6,3,2
+Kathrynborough,Namibia,7,5,5,5,4,5,2,3,6,8,3,3
+Gutierrezhaven,Sweden,8,6,4,6,8,8,6,7,7,5,3,3
+Estradaport,Chile,3,7,7,7,8,6,7,6,7,8,1,4
+Matthewfort,Mozambique,6,7,7,6,8,5,2,4,4,8,5,4
+East Jeffreyfurt,Solomon Islands,6,7,5,5,6,8,3,3,4,7,5,4
+New Larryborough,Samoa,8,4,6,4,7,5,7,4,5,5,2,3
+Henryville,Somalia,3,2,4,4,4,7,6,6,7,6,6,2
+Kathleenland,Switzerland,5,2,2,8,6,7,2,7,4,5,5,3
+South Tara,Western Sahara,5,3,8,5,4,5,4,3,6,8,2,2
+Christophertown,Canada,8,2,6,3,4,8,5,6,7,6,3,3
