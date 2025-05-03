@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class Tag(BaseModel):
     tag: str
@@ -8,6 +8,7 @@ class Tag(BaseModel):
 class TravelPreference(BaseModel):
     user: str
     tags: List[Tag]
+    veto: Optional[List[str]] = []
 
 class Message(BaseModel):
     user_id: str

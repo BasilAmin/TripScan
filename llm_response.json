@@ -28,7 +28,7 @@
       },
       {
         "tag": "affordability",
-        "score": 7
+        "score": 5
       },
       {
         "tag": "public_transit",
@@ -48,8 +48,11 @@
       },
       {
         "tag": "city_cluster",
-        "score": 1
+        "score": 5
       }
+    ],
+    "veto": [
+      "New York"
     ]
   }
 ]

@@ -13,8 +13,9 @@ client = genai.Client(api_key=gemini_api_key)
 prompt_instructions = """
 You are given a chat with different users discussing various topics related to a trip. 
 Your job is to classify the following tags based on their importance for the trip. 
-Each tag should be assigned a score from 1 to 10, where 1 represents minimal importance and 10 represents maximum importance.
+1.Each tag should be assigned a score from 1 to 10, where 1 represents minimal importance and 10 represents maximum importance.
 The tags to score are: food, hiking, english_friendly, nightlife, culture, safety, affordability, public_transit, walkability, cleanliness, beaches, city_cluster.
+2.Include an optional "veto" field: a list of cities that the user explicitly states they do not want to visit. If no cities are vetoed, return an empty list for "veto".
 """
 
 async def chat_with_gemini(chat_data: str) -> str:

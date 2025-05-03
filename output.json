@@ -1,16 +1,16 @@
 {
   "aggregate_preferences": {
-    "hiking": 0.16393442622950818,
-    "food": 0.14754098360655737,
-    "nightlife": 0.01639344262295082,
-    "safety": 0.11475409836065574,
-    "culture": 0.08196721311475409,
-    "beaches": 0.01639344262295082,
-    "walkability": 0.08196721311475409,
-    "public_transit": 0.08196721311475409,
-    "cleanliness": 0.08196721311475409,
-    "affordability": 0.11475409836065574,
-    "english_friendly": 0.08196721311475409
+    "hiking": 0.15873015873015872,
+    "food": 0.14285714285714285,
+    "nightlife": 0.015873015873015872,
+    "safety": 0.1111111111111111,
+    "culture": 0.07936507936507936,
+    "beaches": 0.015873015873015872,
+    "walkability": 0.07936507936507936,
+    "public_transit": 0.07936507936507936,
+    "cleanliness": 0.07936507936507936,
+    "affordability": 0.07936507936507936,
+    "english_friendly": 0.07936507936507936
   },
   "top_recommendations": [
     {
