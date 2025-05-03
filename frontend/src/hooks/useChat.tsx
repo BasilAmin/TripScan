@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { MessageProps } from '@/components/Message';
-import axios from 'axios';
 import api from '@/lib/axios';
 
 export const useChat = (userId: string) => {
