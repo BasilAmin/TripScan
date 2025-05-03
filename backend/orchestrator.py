@@ -30,9 +30,18 @@ async def main_process():
         print(f"Error running recommendation script: {e}")
     
     # Step 4: Calling SkyScanner API
-    with open('recommendation/output.json', 'r') as json_data:
-        query_flight_prices(json_data, origin_city, origin_country, travel_go_date, travel_return_date)
-    
+    with open('recommendation/output.json', 'r') as recommendation_output:
+        json_data = json.loads(recommendation_output)
+    prices = query_flight_prices(json_data, origin_city, origin_country, travel_go_date, travel_return_date)
+    # Insert the 'price' attribute into each city
+    for city in json_data['cities']:
+        city['price'] = 100  # You can set the price to any value you want
+
+
+
+# Convert back to JSON string if needed
+modified_json = json.dumps(json_data, indent=4)
+
 
 # Run the main process
 if __name__ == "__main__":
