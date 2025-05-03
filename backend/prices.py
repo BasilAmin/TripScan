@@ -133,15 +133,13 @@ def get_flight_price(origin_city: str, origin_country, destination_city, destina
 
 
 def query_flight_prices(json_data: str, origin_city: str, origin_country, travel_go_date: str, travel_return_date: str):
-    # Parse the JSON data
-    data = json.loads(json_data)
     with open('backend/data/iata.json', 'r') as file:
         iata_codes = json.load(file)
     # Initialize an array to hold the prices
     prices = [] 
     
     # Iterate over the top recommendations
-    for recommendation in data['top_recommendations']:
+    for recommendation in json_data['top_recommendations']:
         destination_city = recommendation['city']
         destination_country = recommendation['country']
         
