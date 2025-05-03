@@ -1,0 +1,71 @@
+{
+  "aggregate_preferences": {
+    "hiking": 0.07245898866903433,
+    "food": 0.09703619144258413,
+    "nightlife": 0.053014544224589885,
+    "safety": 0.10830373752748182,
+    "culture": 0.09896414679519702,
+    "beaches": 0.061466260781329274,
+    "walkability": 0.09182732961271774,
+    "public_transit": 0.070645188567563,
+    "cleanliness": 0.10004650769490953,
+    "affordability": 0.08137155420260442,
+    "english_friendly": 0.08658041603247082
+  },
+  "top_recommendations": [
+    {
+      "city": "New York",
+      "country": "USA",
+      "match_score": 44.0,
+      "features": {
+        "hiking": 4.0,
+        "food": 10.0,
+        "nightlife": 10.0,
+        "safety": 10.0,
+        "culture": 5.0,
+        "beaches": 8.0,
+        "walkability": 3.0,
+        "public_transit": 6.0,
+        "cleanliness": 7.0,
+        "affordability": 7.0,
+        "english_friendly": 4.0
+      }
+    },
+    {
+      "city": "Barcelona",
+      "country": "Spain",
+      "match_score": 37.7,
+      "features": {
+        "hiking": 1.0,
+        "food": 4.0,
+        "nightlife": 6.0,
+        "safety": 1.0,
+        "culture": 2.0,
+        "beaches": 2.0,
+        "walkability": 7.0,
+        "public_transit": 5.0,
+        "cleanliness": 4.0,
+        "affordability": 3.0,
+        "english_friendly": 6.0
+      }
+    },
+    {
+      "city": "Tokyo",
+      "country": "Japan",
+      "match_score": 18.3,
+      "features": {
+        "hiking": 7.0,
+        "food": 2.0,
+        "nightlife": 6.0,
+        "safety": 6.0,
+        "culture": 7.0,
+        "beaches": 3.0,
+        "walkability": 1.0,
+        "public_transit": 6.0,
+        "cleanliness": 7.0,
+        "affordability": 1.0,
+        "english_friendly": 4.0
+      }
+    }
+  ]
+}

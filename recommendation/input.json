@@ -1,0 +1,269 @@
+[
+    {
+      "user": "User1",
+      "tags": [
+        {
+          "tag": "food",
+          "score": 7
+        },
+        {
+          "tag": "hiking",
+          "score": 10
+        },
+        {
+          "tag": "english_friendly",
+          "score": 6
+        },
+        {
+          "tag": "nightlife",
+          "score": 3
+        },
+        {
+          "tag": "culture",
+          "score": 7
+        },
+        {
+          "tag": "safety",
+          "score": 8
+        },
+        {
+          "tag": "affordability",
+          "score": 6
+        },
+        {
+          "tag": "public_transit",
+          "score": 5
+        },
+        {
+          "tag": "walkability",
+          "score": 7
+        },
+        {
+          "tag": "cleanliness",
+          "score": 7
+        },
+        {
+          "tag": "beaches",
+          "score": 2
+        },
+        {
+          "tag": "city_cluster",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "user": "User2",
+      "tags": [
+        {
+          "tag": "food",
+          "score": 7
+        },
+        {
+          "tag": "hiking",
+          "score": 2
+        },
+        {
+          "tag": "english_friendly",
+          "score": 6
+        },
+        {
+          "tag": "nightlife",
+          "score": 4
+        },
+        {
+          "tag": "culture",
+          "score": 6
+        },
+        {
+          "tag": "safety",
+          "score": 8
+        },
+        {
+          "tag": "affordability",
+          "score": 6
+        },
+        {
+          "tag": "public_transit",
+          "score": 5
+        },
+        {
+          "tag": "walkability",
+          "score": 6
+        },
+        {
+          "tag": "cleanliness",
+          "score": 8
+        },
+        {
+          "tag": "beaches",
+          "score": 10
+        },
+        {
+          "tag": "city_cluster",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "user": "User3",
+      "tags": [
+        {
+          "tag": "food",
+          "score": 10
+        },
+        {
+          "tag": "hiking",
+          "score": 3
+        },
+        {
+          "tag": "english_friendly",
+          "score": 7
+        },
+        {
+          "tag": "nightlife",
+          "score": 4
+        },
+        {
+          "tag": "culture",
+          "score": 10
+        },
+        {
+          "tag": "safety",
+          "score": 8
+        },
+        {
+          "tag": "affordability",
+          "score": 7
+        },
+        {
+          "tag": "public_transit",
+          "score": 6
+        },
+        {
+          "tag": "walkability",
+          "score": 8
+        },
+        {
+          "tag": "cleanliness",
+          "score": 8
+        },
+        {
+          "tag": "beaches",
+          "score": 3
+        },
+        {
+          "tag": "city_cluster",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "user": "User4",
+      "tags": [
+        {
+          "tag": "food",
+          "score": 6
+        },
+        {
+          "tag": "hiking",
+          "score": 8
+        },
+        {
+          "tag": "english_friendly",
+          "score": 6
+        },
+        {
+          "tag": "nightlife",
+          "score": 6
+        },
+        {
+          "tag": "culture",
+          "score": 5
+        },
+        {
+          "tag": "safety",
+          "score": 9
+        },
+        {
+          "tag": "affordability",
+          "score": 5
+        },
+        {
+          "tag": "public_transit",
+          "score": 4
+        },
+        {
+          "tag": "walkability",
+          "score": 6
+        },
+        {
+          "tag": "cleanliness",
+          "score": 7
+        },
+        {
+          "tag": "beaches",
+          "score": 5
+        },
+        {
+          "tag": "city_cluster",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "user": "User5",
+      "tags": [
+        {
+          "tag": "food",
+          "score": 7
+        },
+        {
+          "tag": "hiking",
+          "score": 4
+        },
+        {
+          "tag": "english_friendly",
+          "score": 8
+        },
+        {
+          "tag": "nightlife",
+          "score": 3
+        },
+        {
+          "tag": "culture",
+          "score": 10
+        },
+        {
+          "tag": "safety",
+          "score": 8
+        },
+        {
+          "tag": "affordability",
+          "score": 7
+        },
+        {
+          "tag": "public_transit",
+          "score": 7
+        },
+        {
+          "tag": "walkability",
+          "score": 8
+        },
+        {
+          "tag": "cleanliness",
+          "score": 8
+        },
+        {
+          "tag": "beaches",
+          "score": 3
+        },
+        {
+          "tag": "city_cluster",
+          "score": 8
+        }
+      ]
+    }
+  ]
+  
+    
