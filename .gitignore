@@ -32,6 +32,6 @@ Thumbs.db
 *.swp
 *.bak
 *.orig
-
-# Ngrok
-.ngrok.yml
+messages.csv
+trips.csv
+chat-backend/ideas.txt
