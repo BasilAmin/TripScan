@@ -31,6 +31,7 @@ class RobustCityRecommender:
         self.model = self._build_model()
         self.city_to_idx = {city: idx for idx, city in enumerate(self.df['city'])}
         self.vetoed_cities = set()
+        self.favoured_city = None  # New attribute to store favoured city
         self.scaler = MinMaxScaler()
         self.X_scaled = self.scaler.fit_transform(self.df[self.base_features])
 
@@ -64,6 +65,7 @@ class RobustCityRecommender:
         """Calculate weighted mean preferences safely"""
         agg_prefs = {feat: [] for feat in self.base_features}
         self.vetoed_cities = set()
+        self.favoured_city = None  # Reset favoured city
         
         for user in [u.dict() if hasattr(u, 'dict') else u for u in users_data]:
             if 'veto' in user:
@@ -71,6 +73,9 @@ class RobustCityRecommender:
                     self.vetoed_cities.update(city.lower() for city in user['veto'])
                 else:
                     self.vetoed_cities.add(str(user['veto']).lower())
+            
+            if 'favoured' in user:  # Check for favoured city
+                self.favoured_city = str(user['favoured']).lower()
             
             try:
                 user_total = max(sum(tag['score'] for tag in user['tags']), 1e-6)
@@ -96,7 +101,7 @@ class RobustCityRecommender:
         self.model.fit(X_train, y_train)
 
     def recommend(self, preferences, top_k=10):
-        """Get top 10 recommendations from location.csv"""
+        """Get top 10 recommendations from location.csv with favoured city prioritization"""
         try:
             # Create user preference vector
             user_vec = np.array([preferences.get(feat, 0) for feat in self.base_features])
@@ -110,11 +115,32 @@ class RobustCityRecommender:
                 self.X_scaled
             )[0]
             
-            # Get top 10 recommendations excluding vetoed cities
+            # Get top recommendations excluding vetoed cities
             recommendations = []
+            favoured_city_added = False
+            
+            # First check if favoured city exists and should be added
+            if self.favoured_city:
+                favoured_idx = None
+                for idx, city in enumerate(self.df['city']):
+                    if str(city).lower() == self.favoured_city:
+                        favoured_idx = idx
+                        break
+                
+                if favoured_idx is not None and self.favoured_city not in self.vetoed_cities:
+                    recommendations.append({
+                        'city': self.df.iloc[favoured_idx]['city'],
+                        'country': self.df.iloc[favoured_idx]['country'],
+                        'match_score': 100.0,  # Max score for favoured city
+                        'features': {f: float(self.df.iloc[favoured_idx][f]) for f in preferences.keys()}
+                    })
+                    favoured_city_added = True
+            
+            # Add other cities
             for idx in np.argsort(similarities)[::-1]:
                 city_name = str(self.df.iloc[idx]['city']).lower()
-                if city_name not in self.vetoed_cities:
+                if (city_name not in self.vetoed_cities and 
+                    (not favoured_city_added or city_name != self.favoured_city)):
                     recommendations.append({
                         'city': self.df.iloc[idx]['city'],
                         'country': self.df.iloc[idx]['country'],
@@ -129,8 +155,15 @@ class RobustCityRecommender:
         except Exception as e:
             print(f"Recommendation error: {e}")
             # Fallback to random cities from location.csv
-            location_df = pd.read_csv('location.csv',encoding='latin1')
+            location_df = pd.read_csv('location.csv', encoding='latin1')
             fallback_cities = location_df['City'].sample(min(10, len(location_df))).tolist()
+            
+            # Include favoured city in fallback if specified
+            if self.favoured_city:
+                fallback_cities = [self.favoured_city.title()] + [
+                    c for c in fallback_cities if c.lower() != self.favoured_city
+                ][:top_k-1]
+            
             return [{
                 'city': city,
                 'country': location_df[location_df['City'] == city]['Country'].values[0],
@@ -139,8 +172,6 @@ class RobustCityRecommender:
                            if city in self.city_to_idx else 0
                            for f in preferences.keys()}
             } for city in fallback_cities[:top_k]]
-
-# Rest of the code remains exactly the same...
 
 def generate_recommendations(users_data):
     """Main function to generate recommendations"""
