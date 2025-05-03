@@ -21,8 +21,7 @@ async def get_messages():
 async def send_message(message: Message):
     global messageID
     """Endpoint to send a message and save it to a CSV file."""
-    save_message_to_csv(messageID, message.user_id, message.content)
-    messageID += 1
+    messageID = save_message_to_csv(message.user_id, message.content)
     return {"status": "Message sent", "message_id": messageID}
 
 class TripData(BaseModel):
