@@ -10,11 +10,12 @@ export interface MessageProps {
     avatar?: string;
   };
   content: string;
+  image?: string;
   timestamp: Date;
   isCurrentUser: boolean;
 }
 
-const Message = ({ user, content, timestamp, isCurrentUser }: MessageProps) => {
+const Message = ({ user, content, image, timestamp, isCurrentUser }: MessageProps) => {
   const formattedTime = new Intl.DateTimeFormat('en-US', {
     hour: 'numeric',
     minute: 'numeric',
@@ -46,9 +47,20 @@ const Message = ({ user, content, timestamp, isCurrentUser }: MessageProps) => {
           "message-bubble rounded-lg px-4 py-2 mt-1",
           isCurrentUser ? 
             "bg-primary text-white rounded-tr-none" : 
-            "bg-secondary text-foreground rounded-tl-none"
+            "bg-secondary text-foreground rounded-tl-none",
+          !content && image ? "p-1" : ""
         )}>
-          {content}
+          {image && (
+            <div className="mb-2">
+              <img 
+                src={image} 
+                alt="Shared image" 
+                className="max-w-full rounded" 
+                style={{maxHeight: "200px"}}
+              />
+            </div>
+          )}
+          {content && <p>{content}</p>}
         </div>
       </div>
     </div>

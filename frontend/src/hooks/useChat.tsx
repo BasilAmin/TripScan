@@ -31,45 +31,52 @@ export const useChat = (userId: string) => {
       console.error('Error fetching messages:', error);
     }
   };
-
-  // Send a new message
-  const sendMessage = async (content: string) => {
-    if (!content.trim()) return;
-
+  const sendMessage = async (content: string, image?: File) => {
+    if (!content.trim() && !image) return; // Don't send empty messages
+  
     const newMessage: MessageProps = {
       id: Date.now().toString(),
       user: currentUser,
-      content,
+      image: image ? URL.createObjectURL(image) : undefined,
+      content: content, // Attach text content if provided
       timestamp: new Date(),
       isCurrentUser: true,
     };
-
+  
     setMessages((prev) => [...prev, newMessage]);
-
+  
     try {
       setIsLoading(true);
-      await api.post(`/sendMessage/`, {
-        user_id: userId,
-        content,
-      });
-      await fetchMessages(); // Refresh messages after sending
+  
+      if (image) {
+        // Send the image message
+        const formData = new FormData();
+        formData.append("user_id", userId);
+        formData.append("image", image);
+        formData.append("content", content); // Attach content even if it’s empty (for context)
+  
+        // Call the /sendMessageImage endpoint to send the image
+        await api.post(`/sendMessageImage/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        // Send the text message
+        await api.post(`/sendMessage/`, {
+          user_id: userId,
+          content: content,
+        });
+      }
+  
+      // Fetch updated messages
+      await fetchMessages();
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // Fetch messages on component mount and set up polling for new messages
-  useEffect(() => {
-    fetchMessages(); // Initial fetch
-    const interval = setInterval(() => {
-      fetchMessages(); // Fetch new messages every 2 seconds
-    }, 2000);
-
-    // Clean up the interval on unmount
-    return () => clearInterval(interval);
-  }, [userId]);
 
   // Add clearMessages function to reset chat to empty
   const clearMessages = async () => {
