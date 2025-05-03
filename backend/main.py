@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from .messages import *
 from .orchestrator import *
 from datetime import datetime
+from .image_endpoint import router as image_router
 
 app = FastAPI()
 
@@ -66,8 +67,8 @@ async def negotiate():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-from .image_endpoint import router as image_router
 
+app.include_router(image_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
