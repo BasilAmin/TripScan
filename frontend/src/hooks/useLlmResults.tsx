@@ -1,61 +1,56 @@
 import { useState, useEffect } from 'react';
+import api from '@/lib/axios'; 
 
 export interface DestinationScore {
   city: string;
+  country: string;
   score: number;
+  features: Record<string, number>;
 }
 
-// This would normally be fetched from an API
-const mockLlmResponse = `
-Barcelona,0.92
-Paris,0.87
-Tokyo,0.78
-New York,0.76
-Rome,0.71
-`;
+export interface AggregatePreferences {
+  [key: string]: number;
+}
 
 export const useLlmResults = () => {
   const [destinationScores, setDestinationScores] = useState<DestinationScore[]>([]);
+  const [aggregatePreferences, setAggregatePreferences] = useState<AggregatePreferences>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  
-  useEffect(() => {
-    const fetchLlmResults = async () => {
-      try {
-        // Simulate API call with a delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // In a real app, this would be a fetch to your LLM API
-        // const response = await fetch('/api/analyze-chat');
-        // const data = await response.text();
-        
-        // Parse CSV format (destination,score)
-        const parsedScores = mockLlmResponse
-          .trim()
-          .split('\n')
-          .map(line => {
-            const [city, scoreStr] = line.split(',');
-            return {
-              city: city.trim(),
-              score: parseFloat(scoreStr.trim())
-            };
-          });
-        
-        setDestinationScores(parsedScores);
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Error fetching LLM results:', err);
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-        setIsLoading(false);
+
+  const fetchLlmResults = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get('/recommendations'); // Replace with your FastAPI endpoint
+      const data = response.data;
+
+      if (!data.top_recommendations) {
+        throw new Error('Invalid response structure');
       }
-    };
-    
+
+      const updatedScores = data.top_recommendations.map((item: any) => ({
+        ...item,
+        score: Math.round(item.match_score),
+      }));
+
+      setDestinationScores(updatedScores);
+      setAggregatePreferences(data.aggregate_preferences || {});
+    } catch (err) {
+      console.error('Error fetching LLM results:', err);
+      setError(err instanceof Error ? err : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchLlmResults();
   }, []);
-  
+
   return {
     destinationScores,
+    aggregatePreferences,
     isLoading,
-    error
+    error,
   };
 };

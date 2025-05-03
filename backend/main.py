@@ -1,4 +1,5 @@
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pydantic import BaseModel
@@ -39,6 +40,17 @@ async def send_origin_and_dates(trip_data: TripData):
     save_trip_data_to_csv(trip_data.origin_city, trip_data.start_date, trip_data.end_date)
     return {"status": "Trip data saved", "origin_city": trip_data.origin_city, "start_date": trip_data.start_date, "end_date": trip_data.end_date}
 
+@app.get("/recommendations/")
+async def send_origin_and_dates():
+    try:
+        with open("output.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return JSONResponse(content=data)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="output.json not found")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON format in output.json")
+    
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
