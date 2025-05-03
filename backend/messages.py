@@ -93,30 +93,44 @@ def load_trip_data_from_csv(file_path: str) -> list[TripData]:
     return trips
 
 
-def get_llm_formatted_input(messages_file: str, trips_file: str) -> str:
+def get_llm_formatted_chat(messages_file: str) -> str:
     """Endpoint to send messages and trip data to the LLM.
 
     Args:
         messages_file (str): The path to the CSV file containing messages.
-        trips_file (str): The path to the CSV file containing trip data.
 
     Returns:
         str: Formatted input string for the LLM.
     """
     # Read messages and trip data
     messages = read_messages_from_csv(messages_file)
-    #trips = load_trip_data_from_csv(trips_file)
 
     # Send the formatted data to the LLM API
     formatted_chat_data = "\n".join(f"{msg['user_id']}: {msg['content']}" for msg in messages)
     
     # Format trip information for each trip
-    #trip_info_strings = [
-    #    f"Trip Information:\nOrigin City: {trip.origin_city}\nStart Date: {trip.start_date}\nEnd Date: {trip.end_date}"
-    #    for trip in trips
-    #]
-    #final_data = "\n\n".join(trip_info_strings) + f"\n\nChat Data:\n{formatted_chat_data}"
     final_data = f"\n\nChat Data:\n{formatted_chat_data}"
+    return final_data
+
+def get_llm_formatted_date(trips_file: str) -> str:
+    """Endpoint to send messages and trip data to the LLM.
+
+    Args:
+        trips_file (str): The path to the CSV file containing trip data.
+
+    Returns:
+        str: Formatted input string for the LLM.
+    """
+    # Read trip data
+    trips = load_trip_data_from_csv(trips_file)
+
+    # Format trip information for each trip
+    trip_info_strings = [
+        f"Trip Information:\nOrigin City: {trip.origin_city}\nStart Date: {trip.start_date}\nEnd Date: {trip.end_date}"
+        for trip in trips
+    ]
+    final_data = "\n\n".join(trip_info_strings) 
+
     return final_data
 
 def save_trip_data_to_csv(origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
@@ -154,7 +168,7 @@ if __name__ == "__main__":
         save_message_to_csv(user_id, content)
 
     # Get formatted input for the LLM
-    formatted_input = get_llm_formatted_input('messages.csv', 'trips.csv')
+    formatted_input = get_llm_formatted_chat('messages.csv')
     
     # Print the formatted input
     print(formatted_input)
