@@ -3,9 +3,7 @@ import os
 from typing import List, Dict
 from datetime import datetime
 from models import *
-
 import pandas as pd
-from pydantic import BaseModel
 
 def save_message_to_csv(user_id: str, content: str, file_path: str = "messages.csv") -> int:
     """Saves a message to a CSV file and returns the message_id, which is the row number.
@@ -53,6 +51,11 @@ def read_messages_from_csv(file_path: str = "messages.csv") -> List[Dict[str, st
         List[Dict[str, str]]: A list of messages, where each message is represented as a dictionary.
     """
     messages = []
+
+    # Check if the file exists before attempting to read
+    if not os.path.exists(file_path):
+        # If the file doesn't exist, return an empty list
+        return messages
     
     # Open the CSV file for reading
     with open(file_path, mode='r', encoding='utf-8') as f:
@@ -61,6 +64,7 @@ def read_messages_from_csv(file_path: str = "messages.csv") -> List[Dict[str, st
             messages.append(row)  # Append each row (message) to the list
 
     return messages
+
 
 def load_trip_data_from_csv(file_path: str) -> list[TripData]:
     """Loads trip data from a CSV file and returns a list of TripData instances.
