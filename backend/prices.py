@@ -5,7 +5,10 @@ import json
 API_KEY = 'sh967490139224896692439644109194'
 URL = 'https://partners.api.skyscanner.net/apiservices/v3/flights/indicative/search'  # Example endpoint
 
-def get_flight_price(api_key: str, origin_iata: str, destination_iata: str, travel_date: str):
+def get_flight_price_return(origin_iata: str, destination_iata: str, travel_go_date: str, travel_return_date: str):
+    return get_flight_price(origin_iata, destination_iata, travel_go_date) + get_flight_price(origin_iata, destination_iata, travel_return_date)
+
+def get_flight_price(origin_iata: str, destination_iata: str, travel_date: str):
     try:
         travel_date_obj = datetime.strptime(travel_date, '%Y-%m-%d')
         year = travel_date_obj.year
@@ -46,7 +49,7 @@ def get_flight_price(api_key: str, origin_iata: str, destination_iata: str, trav
     # Set the headers
     headers = {
         'Content-Type': 'application/json',
-        'x-api-key': api_key
+        'x-api-key': API_KEY
     }
 
     response = requests.post(URL, headers=headers, json=query_payload)
@@ -78,7 +81,7 @@ def get_flight_price(api_key: str, origin_iata: str, destination_iata: str, trav
             return None
 
 
-def query_flight_prices(api_key: str, json_data: str, origin_iata: str, travel_date: str):
+def query_flight_prices(json_data: str, origin_iata: str, travel_go_date: str, travel_return_date: str):
     # Parse the JSON data
     data = json.loads(json_data)
     with open('backend/iata.json', 'r') as file:
@@ -95,7 +98,7 @@ def query_flight_prices(api_key: str, json_data: str, origin_iata: str, travel_d
         destination_iata = iata_codes[city]  # You need to implement this function
         
         # Query the flight price
-        price = get_flight_price(api_key, origin_iata, destination_iata, travel_date)
+        price = get_flight_price_return(origin_iata, destination_iata, travel_go_date, travel_return_date)
         
         # Append the price to the list
         prices.append(price)
@@ -105,7 +108,8 @@ def query_flight_prices(api_key: str, json_data: str, origin_iata: str, travel_d
 
 if __name__ == "__main__":
     origin = 'MAD'  # Example IATA code for New York
-    travel_date = '2025-08-15'  # Example travel date
+    travel_go_date = '2025-08-15'  # Example travel date
+    travel_return_date = '2025-09-15'
 
     json_data = '''{
     "aggregate_preferences": {
@@ -179,7 +183,7 @@ if __name__ == "__main__":
     ]
     }'''
     # Call the query_flight_prices function
-    prices = query_flight_prices(API_KEY, json_data, origin, travel_date)
+    prices = query_flight_prices(json_data, origin, travel_go_date, travel_return_date)
 
     # Print the results
     if prices:
