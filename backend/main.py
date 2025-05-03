@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pydantic import BaseModel
 from .messages import *
+from .orchestrator import *
 from datetime import datetime
 
 app = FastAPI()
@@ -24,6 +25,12 @@ async def get_messages():
 async def send_message(message: Message):
     """Endpoint to send a message and save it to a CSV file."""
     messageID = save_message_to_csv(message.user_id, message.content)
+    # Check if the message is "/start" to trigger LLM processing
+    if(message.content == "/start"):
+        messageID = save_message_to_csv("System", "We are processing your request. Please wait...")
+        # Call the orchestrator function to process the messages and trip data
+        BackgroundTasks.add_task(main_process)  
+        return {"status": "Message sent", "message_id": messageID}
     return {"status": "Message sent", "message_id": messageID}
 
 @app.post("/sendOriginAndDates/")

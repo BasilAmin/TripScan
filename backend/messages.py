@@ -105,18 +105,18 @@ def get_llm_formatted_input(messages_file: str, trips_file: str) -> str:
     """
     # Read messages and trip data
     messages = read_messages_from_csv(messages_file)
-    trips = load_trip_data_from_csv(trips_file)
+    #trips = load_trip_data_from_csv(trips_file)
 
     # Send the formatted data to the LLM API
     formatted_chat_data = "\n".join(f"{msg['user_id']}: {msg['content']}" for msg in messages)
     
     # Format trip information for each trip
-    trip_info_strings = [
-        f"Trip Information:\nOrigin City: {trip.origin_city}\nStart Date: {trip.start_date}\nEnd Date: {trip.end_date}"
-        for trip in trips
-    ]
-    final_data = "\n\n".join(trip_info_strings) + f"\n\nChat Data:\n{formatted_chat_data}"
-
+    #trip_info_strings = [
+    #    f"Trip Information:\nOrigin City: {trip.origin_city}\nStart Date: {trip.start_date}\nEnd Date: {trip.end_date}"
+    #    for trip in trips
+    #]
+    #final_data = "\n\n".join(trip_info_strings) + f"\n\nChat Data:\n{formatted_chat_data}"
+    final_data = f"\n\nChat Data:\n{formatted_chat_data}"
     return final_data
 
 def save_trip_data_to_csv(origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):

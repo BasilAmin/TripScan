@@ -1,7 +1,7 @@
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
-from models import *
+from .models import *
 import os
 import asyncio
 
@@ -17,15 +17,7 @@ Each tag should be assigned a score from 1 to 10, where 1 represents minimal imp
 The tags to score are: food, hiking, english_friendly, nightlife, culture, safety, affordability, public_transit, walkability, cleanliness, beaches, city_cluster.
 """
 
-chat_data = """
-User1: I love hiking and exploring nature.
-User2: I prefer relaxing on the beach and enjoying the sun.
-User3: I enjoy trying out local cuisines and visiting historical sites.
-User4: I like adventure sports and thrilling activities.
-User5: I am interested in cultural experiences and art galleries.
-"""
-
-async def chat_with_gemini():
+async def chat_with_gemini(chat_data: str) -> str:
     response = client.models.generate_content(
         model="gemini-2.0-flash", 
         contents=[prompt_instructions, chat_data],
@@ -40,4 +32,11 @@ async def chat_with_gemini():
     return response.text
 
 if __name__ == "__main__":
-    asyncio.run(chat_with_gemini())
+    chat_example = """
+    User1: I love hiking and exploring nature.
+    User2: I prefer relaxing on the beach and enjoying the sun.
+    User3: I enjoy trying out local cuisines and visiting historical sites.
+    User4: I like adventure sports and thrilling activities.
+    User5: I am interested in cultural experiences and art galleries.
+    """
+    asyncio.run(chat_with_gemini(chat_example))
