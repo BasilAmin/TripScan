@@ -49,18 +49,19 @@ export const useChat = (userId: string) => {
       setIsLoading(true);
   
       if (image) {
+        if (!content.trim()) {
+          content = "Image upload";
+      }
         // Send the image message
-        const formData = new FormData();
-        formData.append("user_id", userId);
-        formData.append("image", image);
-        formData.append("content", content); // Attach content even if it’s empty (for context)
-  
+        const base64Image = await convertImageToBase64(image);
+        const userData = {
+          user_id: userId,
+          content: content,
+          image: base64Image,
+        };
+        console.log('Sending image data:', userData); // Log the data being sent
         // Call the /sendMessageImage endpoint to send the image
-        await api.post(`/sendMessageImage/`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await api.post(`/sendMessageImage/`, {userData});
       } else {
         // Send the text message
         await api.post(`/sendMessage/`, {
@@ -88,6 +89,15 @@ export const useChat = (userId: string) => {
     }
   };
 
+  // Helper function to convert image to base64
+  const convertImageToBase64 = (image: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(image);
+    });
+  };
   return {
     messages,
     sendMessage,
