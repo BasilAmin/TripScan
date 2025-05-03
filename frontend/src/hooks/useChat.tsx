@@ -60,10 +60,17 @@ export const useChat = (userId: string) => {
     }
   };
 
-  // Fetch messages on component mount
+  // Fetch messages on component mount and set up polling for new messages
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    fetchMessages(); // Initial fetch
+    const interval = setInterval(() => {
+      fetchMessages(); // Fetch new messages every 2 seconds
+    }, 2000);
+
+    // Clean up the interval on unmount
+    return () => clearInterval(interval);
+  }, [userId]);
+
 
   return {
     messages,
