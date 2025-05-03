@@ -1,0 +1,28 @@
+fer servir el post i el get per emmagatzemar els missatges del text i enviar-los al LLM
+
+també mirar com assignar un id a cada usuari des del servidor
+
+guardar el missatge enviat en un csv
+sendmessage
+{
+  "chat_id": "1234",
+  "user_id": "5678",
+  "content": "Hola, ¿cómo estás?"
+}
+
+retornar els missatges en csv
+getmessages
+[
+  {
+    "message_id": "10000",
+    "user_id": "5678",
+    "content": "Hola",
+    "timestamp": "2025-05-03T10:22:05Z"
+  },
+  {
+    "message_id": "10001",
+    "user_id": "9999",
+    "content": "¡Hola! Todo bien.",
+    "timestamp": "2025-05-03T10:22:10Z"
+  }
+]

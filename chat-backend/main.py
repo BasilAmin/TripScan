@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pydantic import BaseModel
-from backend.messages import *
+from messages import *
 from datetime import datetime
 
 app = FastAPI()
@@ -38,11 +38,3 @@ async def send_origin_and_dates(trip_data: TripData):
     """Endpoint to send origin city and trip dates and save them to a CSV file."""
     save_trip_data_to_csv(trip_data.origin_city, trip_data.start_date, trip_data.end_date)
     return {"status": "Trip data saved", "origin_city": trip_data.origin_city, "start_date": trip_data.start_date, "end_date": trip_data.end_date}
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], 
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
