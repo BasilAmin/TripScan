@@ -134,17 +134,41 @@ def get_llm_formatted_date(trips_file: str) -> str:
 
     return final_data
 
-def save_trip_data_to_csv(user_id:str, origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
-    """Saves trip data to a CSV file."""
-    with open(file_path, mode='a', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        
-        # Write the header if the file is empty
-        if f.tell() == 0:
-            writer.writerow(["user_id", "origin_city", "start_date", "end_date"])  # Write header
-        
-        # Write the trip data as a new row
-        writer.writerow([user_id,origin_city, start_date, end_date])  # Write trip data
+def save_trip_data_to_csv(user_id: str, origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
+    """Saves or updates trip data for a user in a CSV file."""
+    updated = False
+    rows = []
+
+    # If the file exists, read current rows
+    if os.path.exists(file_path):
+        with open(file_path, mode='r', newline='', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row["user_id"] == user_id:
+                    row = {
+                        "user_id": user_id,
+                        "origin_city": origin_city,
+                        "start_date": start_date,
+                        "end_date": end_date
+                    }
+                    updated = True
+                rows.append(row)
+
+    # If not updated, it's a new entry
+    if not updated:
+        rows.append({
+            "user_id": user_id,
+            "origin_city": origin_city,
+            "start_date": start_date,
+            "end_date": end_date
+        })
+
+    # Write everything back to the file
+    with open(file_path, mode='w', newline='', encoding='utf-8') as f:
+        fieldnames = ["user_id", "origin_city", "start_date", "end_date"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
 
 # Example usage
 if __name__ == "__main__":
