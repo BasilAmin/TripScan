@@ -170,6 +170,9 @@ def generate_recommendations(users_data):
             "top_recommendations": results
         }
         
+        print("Recommendations:")
+        print(json.dumps(output, indent=2))
+
         with open('output.json', 'w') as f:
             json.dump(output, f, indent=2)
         
