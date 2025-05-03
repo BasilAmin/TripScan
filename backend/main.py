@@ -32,6 +32,11 @@ async def send_message(message: Message, background_tasks: BackgroundTasks):
         # Call the orchestrator function to process the messages and trip data
         background_tasks.add_task(main_process)  
         return {"status": "Message sent", "message_id": messageID}
+    elif(message.content == "Can we discuss possible travel dates that work for everyone?"):
+        messageID = save_message_to_csv("System", "We are processing your request. Please wait...")
+        # Call the orchestrator function to process the messages and trip data
+        background_tasks.add_task(negociation_process)  
+        return {"status": "Message sent", "message_id": messageID}
     return {"status": "Message sent", "message_id": messageID}
 
 @app.post("/sendOriginAndDates/")
@@ -50,7 +55,17 @@ async def send_origin_and_dates():
         raise HTTPException(status_code=404, detail="output.json not found")
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Invalid JSON format in output.json")
-    
+
+@app.post("/negotiate/")
+async def negotiate():
+    messages = read_messages_from_csv()
+    chat_data = "\n".join([f"{msg['user_id']}: {msg['content']}" for msg in messages])
+    try:
+        result = await chat_with_gemini(chat_data)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 

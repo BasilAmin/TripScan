@@ -1,5 +1,6 @@
 from .messages import *
 from .chat import *
+from .negociation_chat import *
 import asyncio
 import json
 from .prices import *
@@ -41,7 +42,20 @@ async def main_process():
     with open('output_price.json', 'w') as json_file:
         json_file.write(json_data)"""
 
+async def negociation_process():
+    try:
+        # Step 1: Get formatted input from CSV files
+        llm_message = get_llm_formatted_date(trips_file="trips.csv")
+        
+        # Step 2: Get JSON response from Gemini
+        llm_response = await negociate_with_gemini(llm_message)
 
+        save_message_to_csv("System", llm_response)
+        
+    except ImportError:
+        print("Error: recommendation.py not found")
+    except Exception as e:
+        print(f"Error running recommendation script: {e}")
 
 # Run the main process
 if __name__ == "__main__":

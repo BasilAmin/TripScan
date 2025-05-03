@@ -32,15 +32,15 @@
       },
       {
         "tag": "public_transit",
-        "score": 5
+        "score": 3
       },
       {
         "tag": "walkability",
-        "score": 5
+        "score": 3
       },
       {
         "tag": "cleanliness",
-        "score": 5
+        "score": 4
       },
       {
         "tag": "beaches",
