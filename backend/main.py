@@ -22,14 +22,14 @@ async def get_messages():
     return messages
 
 @app.post("/sendMessage/")
-async def send_message(message: Message):
+async def send_message(message: Message, background_tasks: BackgroundTasks):
     """Endpoint to send a message and save it to a CSV file."""
     messageID = save_message_to_csv(message.user_id, message.content)
     # Check if the message is "/start" to trigger LLM processing
     if(message.content == "/start"):
         messageID = save_message_to_csv("System", "We are processing your request. Please wait...")
         # Call the orchestrator function to process the messages and trip data
-        BackgroundTasks.add_task(main_process)  
+        background_tasks.add_task(main_process)  
         return {"status": "Message sent", "message_id": messageID}
     return {"status": "Message sent", "message_id": messageID}
 
