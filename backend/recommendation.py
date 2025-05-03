@@ -57,7 +57,7 @@ class RobustCityRecommender:
         agg_prefs = {feat: [] for feat in self.base_features}
         self.vetoed_cities = set()
         
-        for user in users_data:
+        for user in [u.dict() if hasattr(u, 'dict') else u for u in users_data]:
             if 'veto' in user:
                 if isinstance(user['veto'], list):
                     self.vetoed_cities.update(city.lower() for city in user['veto'])

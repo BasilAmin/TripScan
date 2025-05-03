@@ -1,16 +1,16 @@
 {
   "aggregate_preferences": {
-    "hiking": 0.15873015873015872,
-    "food": 0.14285714285714285,
-    "nightlife": 0.015873015873015872,
-    "safety": 0.1111111111111111,
-    "culture": 0.07936507936507936,
-    "beaches": 0.015873015873015872,
-    "walkability": 0.07936507936507936,
-    "public_transit": 0.07936507936507936,
-    "cleanliness": 0.07936507936507936,
-    "affordability": 0.07936507936507936,
-    "english_friendly": 0.07936507936507936
+    "hiking": 0.1694915254237288,
+    "food": 0.15254237288135594,
+    "nightlife": 0.01694915254237288,
+    "safety": 0.11864406779661017,
+    "culture": 0.0847457627118644,
+    "beaches": 0.01694915254237288,
+    "walkability": 0.0847457627118644,
+    "public_transit": 0.0847457627118644,
+    "cleanliness": 0.0847457627118644,
+    "affordability": 0.0847457627118644,
+    "english_friendly": 0.0847457627118644
   },
   "vetoed_cities": [
     "new york"
