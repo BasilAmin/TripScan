@@ -8,6 +8,7 @@ from .orchestrator import *
 from datetime import datetime
 from .image import get_city_image_link
 from .prices import *
+import random
 import os
 
 app = FastAPI()
@@ -123,25 +124,25 @@ async def clear_chat():
 @app.get("/hotels/")
 async def get_hotels(city: str):
     """
-    Returns a list of hotels (name, location, and price tier) for the given city.
+    Returns the first hotel name and a random price between 200 and 400 for the given city.
     """
     try:
         places = fetch_hotels(city)
     except requests.HTTPError as e:
         raise HTTPException(status_code=e.response.status_code, detail=e.response.text)
 
-    hotels = []
-    for p in places:
-        name = p.get("name", "Unknown")
-        address = ", ".join(p.get("location", {}).get("formatted_address", []))
-        # Extract price tier (1-4) and format as dollar signs
-        price_info = p.get("price", {})
-        tier = price_info.get("tier")
-        price = '$' * tier if isinstance(tier, int) and tier > 0 else "N/A"
-        hotels.append({"name": name, "location": address, "price": price})
+    # Get the first hotel from the list
+    first_hotel = places[0] if places else None
+    if first_hotel:
+        name = first_hotel.get("name", "Unknown")
+        price = random.randint(200, 400)  # Generate a random price between 200 and 400
+        hotel_data = {"name": name, "price": price}
         print("Hotel data:")
-        print(hotels)
-    return {"hotels": hotels}
+        print(hotel_data)
+    else:
+        hotel_data = {"name": "No hotels found", "price": "N/A"}
+
+    return (hotel_data)
 
 @app.get("/flight_info")
 async def flight_info(city: str, user_id: str):

@@ -10,7 +10,6 @@ import { getOrCreateUserId } from "@/lib/utils";
 interface HotelInfo {
   name: string;
   price: number;
-  location: string;
 }
 
 interface FlightInfo {
@@ -47,10 +46,10 @@ const Itinerary = () => {
       try {
         const [hotelRes, flightRes] = await Promise.all([
           api.get(`/hotels/`, { params: { city } }),
-          api.get(`/flight_info`, { params: { city : city, user_id:user_id } }),
+          api.get(`/flight_info`, { params: { city: city, user_id: user_id } }),
         ]);
 
-        setHotel(hotelRes.data);
+        setHotel(hotelRes.data); // Assuming the response contains name and price
         setFlights({
           go: flightRes.data.outbound,
           return: flightRes.data.inbound,
@@ -121,7 +120,6 @@ const Itinerary = () => {
                 </h3>
                 <Card className="p-4">
                   <p className="text-lg font-medium">{hotel.name}</p>
-                  <p className="text-sm text-muted-foreground">{hotel.location}</p>
                   <p className="text-sm text-muted-foreground">Price per night: ${hotel.price}</p>
                 </Card>
               </div>
