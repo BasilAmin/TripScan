@@ -120,7 +120,7 @@ async def clear_chat():
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/hotels/")
-def get_hotels(city: str = Query(..., description="City name to search hotels in")):
+def get_hotels(city: str):
     """
     Returns a list of hotels (name, location, and price tier) for the given city.
     """
