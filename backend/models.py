@@ -25,3 +25,7 @@ class MessageImage(BaseModel):
     user_id: str
     content: str = ""
     image: str = ""  # Base64 string
+
+class UserOrigin(BaseModel):
+    user_id: str
+    origin_city: str
