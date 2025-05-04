@@ -11,10 +11,7 @@ export const useChat = (userId: string) => {
   // Fetch messages from the server
   const fetchMessages = async () => {
     try {
-      console.log('Fetching messages...');
-      console.log(api.defaults.baseURL);  // Log the base URL to ensure it's correct
       const response = await api.get(`/getMessages/`);  // Ensure that this matches the FastAPI endpoint
-      console.log('Fetched data:', response.data);
       const fetchedMessages = response.data.map((msg: any) => ({
         id: msg.message_id,  // You should ensure the response includes message_id
         user: { 
@@ -61,7 +58,16 @@ export const useChat = (userId: string) => {
         };
         console.log('Sending image data:', userData); // Log the data being sent
         // Call the /sendMessageImage endpoint to send the image
-        await api.post(`/sendMessageImage/`, {userData});
+        await api.post(
+          "/sendMessageImage/", 
+          userData,  // Pass userData directly as the body
+          {
+            headers: {
+              "Content-Type": "application/json", // Ensure it's set to application/json
+            }
+          }
+        );
+        
       } else {
         // Send the text message
         await api.post(`/sendMessage/`, {
@@ -98,6 +104,16 @@ export const useChat = (userId: string) => {
         reader.readAsDataURL(image);
     });
   };
+
+  // Poll messages every 2 seconds
+  useEffect(() => {
+    fetchMessages(); // initial load
+
+    const interval = setInterval(fetchMessages, 2000); // poll every 2s
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, []);
+
   return {
     messages,
     sendMessage,

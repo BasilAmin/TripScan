@@ -9,7 +9,6 @@ load_dotenv()
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=gemini_api_key)
 
-my_file = client.files.upload(file="image.jpg")
 
 # Instruct Gemini to identify the place in the image
 prompt_instructions = """
@@ -19,6 +18,8 @@ Do not return anything else, simply these two things
 """
 
 async def image_to_location():
+    my_file = client.files.upload(file="image.jpg")
+
     # Call a vision-capable Gemini model
     response = client.models.generate_content(
         model="gemini-2.0-flash",
@@ -37,7 +38,7 @@ def save_image_to_file(base64_str: str):
     # Decode the base64 string and save the image to a file
     try:
         image_data = base64.b64decode(base64_str.split(",")[1])  # Handle potential prefix like "data:image/jpeg;base64,"
-        with open("uploaded_image.jpg", "wb") as f:
+        with open("image.jpg", "wb") as f:
             f.write(image_data)
     except Exception as e:
         return f"Error saving image: {e}"

@@ -4,7 +4,7 @@ from typing import List, Dict
 from datetime import datetime
 import pandas as pd
 
-from .models import *
+from .models import * 
 
 def save_message_to_csv(user_id: str, content: str, file_path: str = "messages.csv") -> int:
     """Saves a message to a CSV file and returns the message_id, which is the row number.
