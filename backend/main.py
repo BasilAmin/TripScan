@@ -7,6 +7,7 @@ from .messages import *
 from .orchestrator import *
 from datetime import datetime
 from .image import get_city_image_link
+from .prices import *
 import os
 
 app = FastAPI()
@@ -66,7 +67,7 @@ async def send_message(message: Message, background_tasks: BackgroundTasks):
 @app.post("/sendOriginAndDates/")
 async def send_origin_and_dates(trip_data: TripData):
     """Endpoint to send origin city and trip dates and save them to a CSV file."""
-    save_trip_data_to_csv(trip_data.user_id,trip_data.origin_city, trip_data.start_date, trip_data.end_date)
+    save_trip_data_to_csv(trip_data.user_id,trip_data.origin_city, trip_data.start_date, trip_data.end_date, trip_data.origin_country)
     return {"status": "Trip data saved", "origin_city": trip_data.origin_city, "start_date": trip_data.start_date, "end_date": trip_data.end_date}
 
 @app.get("/recommendations/")
@@ -120,7 +121,7 @@ async def clear_chat():
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.get("/hotels/")
-def get_hotels(city: str):
+async def get_hotels(city: str):
     """
     Returns a list of hotels (name, location, and price tier) for the given city.
     """
@@ -138,39 +139,20 @@ def get_hotels(city: str):
         tier = price_info.get("tier")
         price = '$' * tier if isinstance(tier, int) and tier > 0 else "N/A"
         hotels.append({"name": name, "location": address, "price": price})
-
+        print("Hotel data:")
+        print(hotels)
     return {"hotels": hotels}
 
-<<<<<<< HEAD
-@app.get("/flight_info/")
-async def flight_info(user_id: str, origin_city: str):
-=======
 @app.get("/flight_info")
-async def flight_info(UserOrigin):
->>>>>>> 8a4597840b1b7886336cfc79ae79efe3b8b6e96d
+async def flight_info(city: str, user_id: str):
     try:
-
-        # Load flight data from a JSON file
-<<<<<<< HEAD
-        with open("flight_data.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
-=======
-        with open("flight.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
->>>>>>> 8a4597840b1b7886336cfc79ae79efe3b8b6e96d
-            flights_data = json.load(f)
-
-        # Filter flights based on the origin airport
-        filtered_flights = [
-            flight for flight in flights_data if flight.get("origin") == origin_city  # Use origin_city instead of origin
-        ]
-
-        if not filtered_flights:
-            return JSONResponse(content={"message": "No flights found for the specified origin."}, status_code=404)
-
-        return JSONResponse(content=filtered_flights)
-
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=500, detail="Invalid JSON format in flights.json")
+        print(f"Fetching flight info for user {user_id} to {city}")
+        flight_data = skyscanner_api_request(user_id, city)
+        print("Flight data:")
+        print(flight_data)
+        return flight_data
     except Exception as e:
+        print(f"Error occurred while processing flight info: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 app.add_middleware(

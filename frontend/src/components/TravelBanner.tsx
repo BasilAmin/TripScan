@@ -22,7 +22,8 @@ const TravelBanner = () => {
 
     const payload = {
       user_id: user_id,
-      origin_city: origin.code, // e.g., "BCN" or "JFK"
+      origin_city: origin.name, // e.g., "BCN" or "JFK"
+      origin_country: origin.country, // e.g., "ES" or "US"
       start_date: dateRange.from.toISOString().split('T')[0],
       end_date: dateRange.to ? dateRange.to.toISOString().split('T')[0] : null,
     };

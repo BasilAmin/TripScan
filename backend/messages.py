@@ -83,6 +83,7 @@ def load_trip_data_from_csv(file_path: str) -> list[TripData]:
             trip = TripData(
                 user_id=row['user_id'],
                 origin_city=row['origin_city'],
+                origin_country=row['origin_country'],
                 start_date=row['start_date'],
                 end_date=row['end_date']
             )
@@ -135,7 +136,7 @@ def get_llm_formatted_date(trips_file: str) -> str:
 
     return final_data
 
-def save_trip_data_to_csv(user_id: str, origin_city: str, start_date: str, end_date: str, file_path: str = "trips.csv"):
+def save_trip_data_to_csv(user_id: str, origin_city: str, start_date: str, end_date: str, country:str, file_path: str = "trips.csv"):
     """Saves or updates trip data for a user in a CSV file."""
     updated = False
     rows = []
@@ -149,6 +150,7 @@ def save_trip_data_to_csv(user_id: str, origin_city: str, start_date: str, end_d
                     row = {
                         "user_id": user_id,
                         "origin_city": origin_city,
+                        "origin_country": country,
                         "start_date": start_date,
                         "end_date": end_date
                     }
@@ -160,13 +162,14 @@ def save_trip_data_to_csv(user_id: str, origin_city: str, start_date: str, end_d
         rows.append({
             "user_id": user_id,
             "origin_city": origin_city,
+            "origin_country": country,
             "start_date": start_date,
             "end_date": end_date
         })
 
     # Write everything back to the file
     with open(file_path, mode='w', newline='', encoding='utf-8') as f:
-        fieldnames = ["user_id", "origin_city", "start_date", "end_date"]
+        fieldnames = ["user_id", "origin_city","origin_country", "start_date", "end_date"]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, MapPin, Clock, ListCheck, Users, Plane, Hotel } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import api from "@/lib/axios";
-import { getOrCreateUserId} from "@/lib/utils";
+import { getOrCreateUserId } from "@/lib/utils";
 
 interface HotelInfo {
   name: string;
@@ -14,7 +14,14 @@ interface HotelInfo {
 }
 
 interface FlightInfo {
-  departure_time: string;
+  departure_time: {
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    second: number;
+  };
   origin: string;
   destination: string;
   airline: string;
@@ -40,13 +47,13 @@ const Itinerary = () => {
       try {
         const [hotelRes, flightRes] = await Promise.all([
           api.get(`/hotels/`, { params: { city } }),
-          api.get(`/flight_info/`, { params: { user_id: user_id, origin_city: city } }),
+          api.get(`/flight_info`, { params: { city : city, user_id:user_id } }),
         ]);
 
         setHotel(hotelRes.data);
         setFlights({
-          go: flightRes.data.go,
-          return: flightRes.data.return,
+          go: flightRes.data.outbound,
+          return: flightRes.data.inbound,
         });
       } catch (error) {
         console.error("Error fetching itinerary data:", error);
@@ -57,6 +64,11 @@ const Itinerary = () => {
 
     fetchItineraryData();
   }, [city]);
+
+  const formatDate = (date: any) => {
+    const formattedDate = new Date(date.year, date.month - 1, date.day, date.hour, date.minute, date.second);
+    return formattedDate.toLocaleString();
+  };
 
   if (loading) {
     return (
@@ -132,7 +144,7 @@ const Itinerary = () => {
                       Airline: {flights.go.airline}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Departure Time: {flights.go.departure_time}
+                      Departure Time: {formatDate(flights.go.departure_time)}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Price: ${flights.go.price}
@@ -149,7 +161,7 @@ const Itinerary = () => {
                       Airline: {flights.return.airline}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Departure Time: {flights.return.departure_time}
+                      Departure Time: {formatDate(flights.return.departure_time)}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       Price: ${flights.return.price}
@@ -161,18 +173,17 @@ const Itinerary = () => {
 
             {/* Purchase Section */}
             <div className="mt-8 pt-6 border-t text-center">
-            <h3 className="text-xl font-semibold mb-4 flex justify-center items-center">
-            <ListCheck className="mr-2 h-5 w-5 text-primary" />
-            Purchase Trip
-            </h3>
-            <p className="text-muted-foreground mb-6">
-            Ready to enjoy an unforgettable experience in {city}? Book your trip now!
-            </p>
-            <Button onClick={() => navigate("/")}>
-            Go to homepage
-            </Button>
+              <h3 className="text-xl font-semibold mb-4 flex justify-center items-center">
+                <ListCheck className="mr-2 h-5 w-5 text-primary" />
+                Purchase Trip
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                Ready to enjoy an unforgettable experience in {city}? Book your trip now!
+              </p>
+              <Button onClick={() => navigate("/")}>
+                Go to homepage
+              </Button>
             </div>
-
           </CardContent>
         </Card>
       </div>

@@ -18,6 +18,7 @@ class Message(BaseModel):
 class TripData(BaseModel):
     user_id: str
     origin_city: str  # Three-letter city code
+    origin_country: str  # Country name
     start_date: str   # Start date in ISO format (YYYY-MM-DD)
     end_date: str     # End date in ISO format (YYYY-MM-DD)
 
