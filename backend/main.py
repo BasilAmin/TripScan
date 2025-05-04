@@ -1,18 +1,37 @@
-from fastapi import FastAPI, BackgroundTasks, HTTPException
+from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from pydantic import BaseModel
-from datetime import datetime
-import os
-
 from .messages import *
 from .orchestrator import *
+from datetime import datetime
 from .image import get_city_image_link
-from .imageAi import *
-
+import os
 
 app = FastAPI()
+
+FOURSQUARE_API_KEY = os.getenv("FOURSQUARE_API_KEY")
+if not FOURSQUARE_API_KEY:
+    raise RuntimeError("Set FOURSQUARE_API_KEY in your environment")
+
+HEADERS = {
+    "Accept": "application/json",
+    "Authorization": FOURSQUARE_API_KEY
+}
+
+def fetch_hotels(city: str, limit: int = 5):
+    resp = requests.get(
+        "https://api.foursquare.com/v3/places/search",
+        headers=HEADERS,
+        params={
+            "query": "hotel",
+            "near": city,
+            "limit": limit
+        }
+    )
+    resp.raise_for_status()
+    return resp.json().get("results", [])
 
 @app.get("/")
 def read_root():
@@ -100,22 +119,27 @@ async def clear_chat():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@app.post("/sendMessageImage/")
-async def detect_location_from_image(user_data: MessageImage):
+@app.get("/hotels/")
+def get_hotels(city: str = Query(..., description="City name to search hotels in")):
     """
-    Endpoint to detect location from an image using Gemini API.
+    Returns a list of hotels (name and formatted address) for the given city.
     """
     try:
-        # Save the image to a file
-        save_image_to_file(user_data.image)
-        # Run the analysis with Gemini
-        location = await image_to_location()
-        save_message_to_csv(user_data.user_id, user_data.content)
-        save_message_to_csv("System", f"The user {user_data.user_id} upload a photo from {location}")
-        return {"location": location}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
+        places = fetch_hotels(city)
+    except requests.HTTPError as e:
+        raise HTTPException(status_code=e.response.status_code, detail=e.response.text)
+
+    if not places:
+        return {"hotels": []}
+
+    hotels = []
+    for p in places:
+        name = p.get("name", "Unknown")
+        address = ", ".join(p.get("location", {}).get("formatted_address", []))
+        hotels.append({"name": name, "location": address})
+
+    return {"hotels": hotels}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -123,7 +147,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
