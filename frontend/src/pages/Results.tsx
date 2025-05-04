@@ -15,6 +15,10 @@ const Results = () => {
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
 
+    const handleSeeItinerary = (city: string) => {
+      navigate('/itinerary', { state: { city } });
+    };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
@@ -73,6 +77,14 @@ const Results = () => {
                           className="mt-4 rounded-lg shadow-md"
                           style={{ width: '100%', height: '300px', objectFit: 'cover' }}
                         />
+                        <Button 
+                          className="mt-4 w-full"
+                          variant="outline"
+                          onClick={() => handleSeeItinerary(destination.city)}
+                        >
+                          <Calendar className="mr-2 h-4 w-4" />
+                          See Itinerary
+                        </Button>
                       </CardContent>
                     </Card>
                   ))}
@@ -85,6 +97,7 @@ const Results = () => {
                       <TableHead>Destination</TableHead>
                       <TableHead>Score</TableHead>
                       <TableHead>Compatibility</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -102,6 +115,16 @@ const Results = () => {
                               style={{ width: `${destination.score}%` }}
                             ></div>
                           </div>
+                          </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleSeeItinerary(destination.city)}
+                          >
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Itinerary
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
