@@ -141,12 +141,21 @@ def get_hotels(city: str):
 
     return {"hotels": hotels}
 
+<<<<<<< HEAD
 @app.get("/flight_info/")
 async def flight_info(user_id: str, origin_city: str):
+=======
+@app.get("/flight_info")
+async def flight_info(UserOrigin):
+>>>>>>> 8a4597840b1b7886336cfc79ae79efe3b8b6e96d
     try:
 
         # Load flight data from a JSON file
+<<<<<<< HEAD
         with open("flight_data.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
+=======
+        with open("flight.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
+>>>>>>> 8a4597840b1b7886336cfc79ae79efe3b8b6e96d
             flights_data = json.load(f)
 
         # Filter flights based on the origin airport
