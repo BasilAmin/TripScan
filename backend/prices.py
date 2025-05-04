@@ -1,10 +1,13 @@
 from datetime import datetime
-import os
 import requests
 import json
 from .messages import *
+from dotenv import load_dotenv
+import os
 
-API_KEY = 'sh967490139224896692439644109194'
+load_dotenv()
+API_KEY = os.getenv("SKYSCANNER_API_KEY")
+
 URL_PRICES = 'https://partners.api.skyscanner.net/apiservices/v3/flights/indicative/search'
 URL_AIRPORTS = 'https://partners.api.skyscanner.net/apiservices/v3/autosuggest/flights'
 headers = {
