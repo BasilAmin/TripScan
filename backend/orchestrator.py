@@ -32,7 +32,7 @@ async def main_process():
         print("Error: recommendation.py not found")
     except Exception as e:
         print(f"Error running recommendation script: {e}")
-    """
+        """
     # Step 4: Calling SkyScanner API
     with open('recommendation/output.json', 'r') as recommendation_output:
         json_data = json.loads(recommendation_output)

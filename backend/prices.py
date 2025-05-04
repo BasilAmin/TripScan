@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import requests
 import json
 
@@ -121,6 +122,7 @@ def get_flight_price(origin_city: str, origin_country, destination_city, destina
                             cheapest_price = price
                             best_origin_iata = origin_iata
                             best_destination_iata = destination_iata
+                            best_data = data
                 
                 except KeyError:
                     print("Price not found in the response.")
@@ -128,13 +130,15 @@ def get_flight_price(origin_city: str, origin_country, destination_city, destina
             else:
                 print(f"Error: {response.status_code}, {response.text}")
                 return None
-
+    append_flight_info(best_data)
     return cheapest_price if cheapest_price != float('inf') else None
 
 
-def query_flight_prices(json_data: str, origin_city: str, origin_country, travel_go_date: str, travel_return_date: str):
+def query_flight_prices(json_data_str, origin_city, origin_country, travel_go_date, travel_return_date: str):
     with open('backend/data/iata.json', 'r') as file:
         iata_codes = json.load(file)
+    json_data = json.loads(json_data_str)
+
     # Initialize an array to hold the prices
     prices = [] 
     
@@ -150,6 +154,143 @@ def query_flight_prices(json_data: str, origin_city: str, origin_country, travel
         prices.append(price)
     
     return prices
+
+def save_flight_info(data):
+    flight_info = []
+    try:
+        quotes = data['content']['results']['quotes']
+        for quote_key in quotes:
+            quote = quotes[quote_key]
+
+            # Extract flight details
+            outbound_leg = quote.get("outboundLeg", {})
+            inbound_leg = quote.get("inboundLeg", {})
+            marketing_carrier_id = outbound_leg.get("marketingCarrierId")
+
+            # Get airline name
+            airline_name = data['content']['results']['carriers'].get(marketing_carrier_id, {}).get("name", "Unknown Airline")
+
+            # Get departure and arrival times
+            outbound_departure = outbound_leg.get("departureDateTime", {})
+            inbound_departure = inbound_leg.get("departureDateTime", {})
+
+            # Format the departure and arrival times
+            outbound_departure_time = f"{outbound_departure.get('year')}-{outbound_departure.get('month')}-{outbound_departure.get('day')} " \
+                                        f"{outbound_departure.get('hour')}:{outbound_departure.get('minute')}:{outbound_departure.get('second')}"
+            inbound_departure_time = f"{inbound_departure.get('year')}-{inbound_departure.get('month')}-{inbound_departure.get('day')} " \
+                                        f"{inbound_departure.get('hour')}:{inbound_departure.get('minute')}:{inbound_departure.get('second')}"
+
+            # Get airport names
+            outbound_origin_name = data['content']['results']['places'].get(outbound_leg.get("originPlaceId"), {}).get("name", "Unknown Origin")
+            outbound_destination_name = data['content']['results']['places'].get(outbound_leg.get("destinationPlaceId"), {}).get("name", "Unknown Destination")
+            inbound_origin_name = data['content']['results']['places'].get(inbound_leg.get("originPlaceId"), {}).get("name", "Unknown Inbound Origin")
+            inbound_destination_name = data['content']['results']['places'].get(inbound_leg.get("destinationPlaceId"), {}).get("name", "Unknown Inbound Destination")
+
+            # Get the price
+            price = quote.get("minPrice", {}).get("amount", "Unknown Price")
+
+            # Store the flight information including price
+            flight_info.append({
+                "outbound": {
+                    "departure_time": outbound_departure_time,
+                    "arrival_time": outbound_destination_name,
+                    "airline": airline_name,
+                    "origin": outbound_origin_name,
+                    "destination": outbound_destination_name,
+                    "price": price
+                },
+                "inbound": {
+                    "departure_time": inbound_departure_time,
+                    "arrival_time": inbound_destination_name,
+                    "airline": airline_name,
+                    "origin": inbound_origin_name,
+                    "destination": inbound_destination_name,
+                    "price": price
+                }
+            })
+
+    except KeyError as e:
+        print(f"KeyError: {e} - Price or other data not found in the response.")
+        return None
+
+    # Load existing flight data if the file exists
+    try:
+        with open('flight_data.json', 'r') as json_file:
+            existing_data = json.load(json_file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        existing_data = []  # If the file doesn't exist or is empty, start with an empty list
+
+    # Append new flight information to existing data
+    existing_data.extend(flight_info)
+
+    # Save the updated flight information to a JSON file
+    with open('flight_data.json', 'w') as json_file:
+        json.dump(existing_data, json_file, indent=4)
+
+    return flight_info
+
+
+def append_flight_info(data):
+    # Extract relevant information from the API response
+    try:
+        # Access the quotes from the API response
+        quotes = data['content']['results']['quotes']
+        carriers = data['content']['results']['carriers']
+        places = data['content']['results']['places']
+
+        # Iterate through each quote in the quotes dictionary
+        for quote_key, quote in quotes.items():
+            # Extract price
+            price = quote['minPrice']['amount']
+
+            # Extract outbound leg details
+            outbound_leg = quote['outboundLeg']
+            departure_time = f"{outbound_leg['departureDateTime']['year']}-{outbound_leg['departureDateTime']['month']:02d}-{outbound_leg['departureDateTime']['day']:02d} " \
+                             f"{outbound_leg['departureDateTime']['hour']:02d}:{outbound_leg['departureDateTime']['minute']:02d}:{outbound_leg['departureDateTime']['second']:02d}"
+            origin_place_id = outbound_leg['originPlaceId']
+            destination_place_id = outbound_leg['destinationPlaceId']
+
+            # Get the airline name using the marketingCarrierId
+            airline_id = outbound_leg['marketingCarrierId']
+            airline_name = carriers[airline_id]['name'] if airline_id in carriers else "Unknown Airline"
+
+            # Get the origin and destination IATA codes using place IDs
+            origin = places[origin_place_id]['iata'] if origin_place_id in places else "Unknown Origin"
+            destination = places[destination_place_id]['iata'] if destination_place_id in places else "Unknown Destination"
+
+            # Create a flight info dictionary
+            flight_info = {
+                "departure_time": departure_time,
+                "origin": origin,
+                "destination": destination,
+                "airline": airline_name,
+                "price": price
+            }
+
+            json_file_path = "flight_data.json"
+            # Check if the JSON file exists
+            if os.path.exists(json_file_path):
+                # If it exists, read the existing data
+                with open(json_file_path, 'r') as file:
+                    # Check if the file is empty
+                    if os.stat(json_file_path).st_size == 0:
+                        existing_data = []  # Initialize as an empty list if the file is empty
+                    else:
+                        existing_data = json.load(file)
+            else:
+                # If it doesn't exist, create a new list
+                existing_data = []
+            # Append the new flight info to the existing data
+            existing_data.append(flight_info)
+
+            # Write the updated data back to the JSON file
+            with open(json_file_path, 'w') as file:
+                json.dump(existing_data, file, indent=4)
+
+        print("Flight information appended successfully.")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 if __name__ == "__main__":
