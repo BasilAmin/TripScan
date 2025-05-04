@@ -1,4 +1,6 @@
 import requests
+import os
+from dotenv import dotenv_values
 
 def get_city_image_link(city_name):
     """
@@ -11,7 +13,7 @@ def get_city_image_link(city_name):
         # Pexels API endpoint (no key needed)
         url = f"https://api.pexels.com/v1/search?query={city_name}+city+skyline&per_page=1"        # Make the request with default headers
         headers = {
-            "Authorization": "uf8L1WVvEn7L6obVPlw8JZv1VXE6LkVTegXKbZeJAsx5vFCGMIEcBqRL"
+            "Authorization": os.getenv("PEXELS_API_KEY")
         }
         # Make the request with the headers
         response = requests.get(url, headers=headers)
