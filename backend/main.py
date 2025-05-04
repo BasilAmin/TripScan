@@ -140,6 +140,48 @@ def get_hotels(city: str = Query(..., description="City name to search hotels in
 
     return {"hotels": hotels}
 
+@app.get("/flight_info")
+async def flight_info(user_id):
+    try:
+        # Load the trip data from the CSV file
+        trip_data = pd.read_csv("trips.csv")
+        
+        # Find the row corresponding to the user_id
+        user_trip = trip_data[trip_data['user_id'] == user_id]
+        
+        if user_trip.empty:
+            raise HTTPException(status_code=404, detail="User ID not found.")
+        
+        # Extract the origin city
+        origin_city = user_trip.iloc[0]['origin_city']
+
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="trips.csv not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    try:
+        # Load flight data from a JSON file
+        with open("flight_data.json", "r", encoding="utf-8") as f:
+            flights_data = json.load(f)
+
+        # Filter flights based on the origin airport
+        filtered_flights = [
+            flight for flight in flights_data if flight.get("origin") == origin
+        ]
+
+        if not filtered_flights:
+            return JSONResponse(content={"message": "No flights found for the specified origin."}, status_code=404)
+
+        return JSONResponse(content=filtered_flights)
+
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="flights.json not found")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Invalid JSON format in flights.json")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
