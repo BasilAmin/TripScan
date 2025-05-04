@@ -142,7 +142,7 @@ def get_hotels(city: str = Query(..., description="City name to search hotels in
     return {"hotels": hotels}
 
 @app.get("/flight_info")
-async def flight_info(user_id):
+async def flight_info(user_id: str):
     try:
         # Load the trip data from the CSV file
         trip_data = pd.read_csv("trips.csv")
@@ -163,12 +163,12 @@ async def flight_info(user_id):
 
     try:
         # Load flight data from a JSON file
-        with open("flight_data.json", "r", encoding="utf-8") as f:
+        with open("flights.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
             flights_data = json.load(f)
 
         # Filter flights based on the origin airport
         filtered_flights = [
-            flight for flight in flights_data if flight.get("origin") == origin
+            flight for flight in flights_data if flight.get("origin") == origin_city  # Use origin_city instead of origin
         ]
 
         if not filtered_flights:
