@@ -122,21 +122,22 @@ async def clear_chat():
 @app.get("/hotels/")
 def get_hotels(city: str = Query(..., description="City name to search hotels in")):
     """
-    Returns a list of hotels (name and formatted address) for the given city.
+    Returns a list of hotels (name, location, and price tier) for the given city.
     """
     try:
         places = fetch_hotels(city)
     except requests.HTTPError as e:
         raise HTTPException(status_code=e.response.status_code, detail=e.response.text)
 
-    if not places:
-        return {"hotels": []}
-
     hotels = []
     for p in places:
         name = p.get("name", "Unknown")
         address = ", ".join(p.get("location", {}).get("formatted_address", []))
-        hotels.append({"name": name, "location": address})
+        # Extract price tier (1-4) and format as dollar signs
+        price_info = p.get("price", {})
+        tier = price_info.get("tier")
+        price = '$' * tier if isinstance(tier, int) and tier > 0 else "N/A"
+        hotels.append({"name": name, "location": address, "price": price})
 
     return {"hotels": hotels}
 
