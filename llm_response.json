@@ -4,7 +4,7 @@
     "tags": [
       {
         "tag": "food",
-        "score": 7
+        "score": 5
       },
       {
         "tag": "hiking",
@@ -12,45 +12,48 @@
       },
       {
         "tag": "english_friendly",
-        "score": 5
+        "score": 7
       },
       {
         "tag": "nightlife",
-        "score": 3
+        "score": 5
       },
       {
         "tag": "culture",
-        "score": 5
+        "score": 8
       },
       {
         "tag": "safety",
-        "score": 5
+        "score": 7
       },
       {
         "tag": "affordability",
-        "score": 5
+        "score": 6
       },
       {
         "tag": "public_transit",
-        "score": 5
+        "score": 7
       },
       {
         "tag": "walkability",
-        "score": 5
+        "score": 7
       },
       {
         "tag": "cleanliness",
-        "score": 5
+        "score": 7
       },
       {
         "tag": "beaches",
-        "score": 3
+        "score": 1
       },
       {
         "tag": "city_cluster",
         "score": 5
       }
     ],
-    "veto": []
+    "veto": [],
+    "favoured_city": [
+      "Paris"
+    ]
   }
 ]

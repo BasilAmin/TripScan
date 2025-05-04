@@ -9,6 +9,7 @@ class TravelPreference(BaseModel):
     user: str
     tags: List[Tag]
     veto: Optional[List[str]] = []
+    favoured_city: Optional[List[str]] = []
 
 class Message(BaseModel):
     user_id: str
