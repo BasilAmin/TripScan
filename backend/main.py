@@ -141,11 +141,12 @@ def get_hotels(city: str):
 
     return {"hotels": hotels}
 
-@app.get("/flight_info")
+@app.get("/flight_info/")
 async def flight_info(user_id: str, origin_city: str):
     try:
+
         # Load flight data from a JSON file
-        with open("flights.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
+        with open("flight_data.json", "r", encoding="utf-8") as f:  # Ensure the filename matches your actual file
             flights_data = json.load(f)
 
         # Filter flights based on the origin airport
@@ -158,8 +159,6 @@ async def flight_info(user_id: str, origin_city: str):
 
         return JSONResponse(content=filtered_flights)
 
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="flights.json not found")
     except json.JSONDecodeError:
         raise HTTPException(status_code=500, detail="Invalid JSON format in flights.json")
     except Exception as e:
