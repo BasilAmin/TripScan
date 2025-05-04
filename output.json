@@ -1,23 +1,23 @@
 {
   "aggregate_preferences": {
-    "hiking": 0.015151515151515152,
-    "food": 0.07575757575757576,
-    "nightlife": 0.07575757575757576,
-    "safety": 0.10606060606060606,
-    "culture": 0.12121212121212122,
-    "beaches": 0.015151515151515152,
-    "walkability": 0.10606060606060606,
-    "public_transit": 0.10606060606060606,
-    "cleanliness": 0.10606060606060606,
-    "affordability": 0.09090909090909091,
-    "english_friendly": 0.10606060606060606
+    "hiking": 0.019230769230769232,
+    "food": 0.09615384615384616,
+    "nightlife": 0.09615384615384616,
+    "safety": 0.09615384615384616,
+    "culture": 0.09615384615384616,
+    "beaches": 0.019230769230769232,
+    "walkability": 0.09615384615384616,
+    "public_transit": 0.09615384615384616,
+    "cleanliness": 0.09615384615384616,
+    "affordability": 0.09615384615384616,
+    "english_friendly": 0.09615384615384616
   },
   "vetoed_cities": [],
   "top_recommendations": [
     {
       "city": "London",
       "country": "UK",
-      "match_score": 55.8,
+      "match_score": 57.4,
       "features": {
         "hiking": 1.0,
         "food": 10.0,
@@ -35,7 +35,7 @@
     {
       "city": "Rome",
       "country": "Italy",
-      "match_score": 47.6,
+      "match_score": 47.8,
       "features": {
         "hiking": 10.0,
         "food": 4.0,
@@ -53,7 +53,7 @@
     {
       "city": "Paris",
       "country": "France",
-      "match_score": 46.0,
+      "match_score": 45.3,
       "features": {
         "hiking": 2.0,
         "food": 3.0,
@@ -71,7 +71,7 @@
     {
       "city": "Berlin",
       "country": "Germany",
-      "match_score": 42.1,
+      "match_score": 43.5,
       "features": {
         "hiking": 2.0,
         "food": 2.0,
@@ -89,7 +89,7 @@
     {
       "city": "Tokyo",
       "country": "Japan",
-      "match_score": 36.6,
+      "match_score": 35.3,
       "features": {
         "hiking": 7.0,
         "food": 2.0,
@@ -107,7 +107,7 @@
     {
       "city": "Singapore",
       "country": "Singapore",
-      "match_score": 25.6,
+      "match_score": 27.7,
       "features": {
         "hiking": 1.0,
         "food": 3.0,

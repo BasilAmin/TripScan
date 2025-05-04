@@ -8,6 +8,7 @@ from .orchestrator import *
 from datetime import datetime
 from .image import get_city_image_link
 from .prices import *
+from .imageAi import *
 import random
 import os
 
@@ -64,6 +65,22 @@ async def send_message(message: Message, background_tasks: BackgroundTasks):
         background_tasks.add_task(negociation_process)  
         return {"status": "Message sent", "message_id": messageID}
     return {"status": "Message sent", "message_id": messageID}
+
+@app.post("/sendMessageImage/")
+async def detect_location_from_image(user_data: MessageImage):
+    """
+    Endpoint to detect location from an image using Gemini API.
+    """
+    try:
+        # Save the image to a file
+        save_image_to_file(user_data.image)
+        # Run the analysis with Gemini
+        location = await image_to_location()
+        save_message_to_csv(user_data.user_id, user_data.content)
+        save_message_to_csv("System", f"The user {user_data.user_id} upload a photo from {location}")
+        return {"location": location}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/sendOriginAndDates/")
 async def send_origin_and_dates(trip_data: TripData):

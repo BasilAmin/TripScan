@@ -1,7 +1,14 @@
 message_id,user_id,content,timestamp
-1,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Image upload,2025-05-04 02:11:43
-2,System,The user 2a26e57f-9b9d-48a3-9a7e-e5b5385aca98 upload a photo from Paris,2025-05-04 02:11:43
-3,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,I want to go to this place,2025-05-04 02:24:57
-4,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we get some recommendations?,2025-05-04 02:25:02
-5,System,We are processing your request. Please wait...,2025-05-04 02:25:02
-6,System,The recommendations are ready. Please click the b the output.json file.,2025-05-04 02:25:04
+1,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,This is an example,2025-05-04 05:41:13
+2,System,The user 2a26e57f-9b9d-48a3-9a7e-e5b5385aca98 upload a photo from Paris,2025-05-04 05:41:13
+3,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we get some recommendations?,2025-05-04 05:41:22
+4,System,We are processing your request. Please wait...,2025-05-04 05:41:22
+5,System,The recommendations are ready. Please click the b the output.json file.,2025-05-04 05:41:24
+6,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we get some recommendations?,2025-05-04 05:42:43
+7,System,We are processing your request. Please wait...,2025-05-04 05:42:43
+8,System,The recommendations are ready. Please click the button below to see them.,2025-05-04 05:42:45
+9,2a26e57f-9b9d-48a3-9a7e-e5b5385aca98,Can we discuss possible travel dates that work for everyone?,2025-05-04 05:45:02
+10,System,We are processing your request. Please wait...,2025-05-04 05:45:02
+11,System,"Suggested Dates: [2025-05-04 to 2025-05-13]
+Reason: This date range accommodates the trip's start and end dates.
+",2025-05-04 05:45:02

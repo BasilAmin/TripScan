@@ -27,7 +27,7 @@ async def main_process():
         print(recommendations)
 
         #Step 4: Let the user know the recommendations
-        save_message_to_csv("System", "The recommendations are ready. Please click the b the output.json file.")
+        save_message_to_csv("System", "The recommendations are ready. Please click the button below to see them.")
     except ImportError:
         print("Error: recommendation.py not found")
     except Exception as e:
@@ -59,32 +59,6 @@ async def negociation_process():
         print("Error: recommendation.py not found")
     except Exception as e:
         print(f"Error running recommendation script: {e}")
-
-def priceJSONTest():
-    origin_city = 'Madrid'
-    origin_country = 'Spain'
-    travel_go_date = '2025-08-15'
-    travel_return_date = '2025-09-15'
-    with open('recommendation/output.json', 'r') as recommendation_output:
-        json_data = json.load(recommendation_output)
-
-    prices = query_flight_prices(json_data, origin_city, origin_country, travel_go_date, travel_return_date)
-    # Insert the 'price' attribute into each city
-    for i, city in enumerate(json_data['top_recommendations']):
-        city['price'] = prices[i]  # Assign the price to the city
-
-    with open('output_price.json', 'w') as json_file:
-        json.dump(json_data, json_file, indent=4)
-    
-    if prices:
-        for i, price in enumerate(prices):
-            if price is not None:
-                print(f"The price for the flight to {json_data['top_recommendations'][i]['city']} is: {price}€.")
-            else:
-                print(f"Could not retrieve the flight price for {json_data['top_recommendations'][i]['city']}.")
-    else:
-        print("Could not retrieve any flight prices.")
-
 
 # Run the main process
 if __name__ == "__main__":
